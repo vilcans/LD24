@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+compile '*' do
+  if item[:extension] == 'html'
+    filter :erb
+    layout 'default'
+  end
+end
+
+route '*' do
+  if item[:extension] == 'html'
+    # Write item with identifier /foo/ to /foo/index.html
+    item.identifier + 'index.html'
+  else
+    # Write item with identifier /foo/ to /foo.ext
+    item.identifier.chop + '.' + item[:extension]
+  end
+end
+
+layout '*', :erb
