@@ -80,3 +80,6 @@ watcher:
 author: Martin Vilcans
 # Default page title. Can be overridden by setting title in the item's YAML.
 #title: My site
+
+# Account ID for Google Analytics
+#analytics_account: UA-XXXXX-X

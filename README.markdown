@@ -48,6 +48,18 @@ Replace the head in layouts/default.html with:
       <![endif]-->
     </head>
 
+Add if statement and use config for Analytics:
+
+    <% if @site.config[:analytics_account] %>
+      <script>
+        var _gaq=[['_setAccount','<%= @site.config[:analytics_account] %>'],['_trackPageview']];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+      </script>
+    <% end %>
+
+
 Remove unneeded files:
 
     rm content/js/libs/less-1.3.0.min.js
