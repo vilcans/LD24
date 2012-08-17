@@ -47,3 +47,7 @@ Replace the head in layouts/default.html with:
       <script>window.html5 || document.write('<script src="js/libs/html5.js"><\/script>')</script>
       <![endif]-->
     </head>
+
+Remove unneeded files:
+
+    rm content/js/libs/less-1.3.0.min.js

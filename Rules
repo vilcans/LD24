@@ -6,6 +6,9 @@ end
 route '/less/style/' do
   '/style.css'
 end
+route '/less/*/' do
+  # Ignore subdirectories of less/ (includes)
+end
 
 compile '*' do
   if item[:extension] == 'html'
