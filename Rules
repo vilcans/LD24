@@ -17,16 +17,22 @@ end
 # Access single coffeescript sources as JS.
 # Only for development use. In production, use /js/all/
 route '/coffee/*' do
-  item.identifier.sub(/^\/coffee\//, '/js/').chop + '.js'
+  unless $concat_js
+    item.identifier.sub(/^\/coffee\//, '/js/').chop + '.js'
+  end
 end
 
 # All JavaScript sources concatenated and minified
 compile '/js/all/' do
   filter :erb
-  filter :uglify_js
+  if $minify_js
+    filter :uglify_js
+  end
 end
 route '/js/all/' do
-  '/js/all.js'
+  if $concat_js
+    '/js/all.js'
+  end
 end
 
 compile '*' do
