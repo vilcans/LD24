@@ -10,6 +10,13 @@ route '/less/*/' do
   # Ignore subdirectories of less/ (includes)
 end
 
+compile 'coffee/*' do
+  filter :coffeescript
+end
+route 'coffee/*' do
+  item.identifier.sub(/^\/coffee\//, '/js/').chop + '.js'
+end
+
 compile '*' do
   if item[:extension] == 'html'
     filter :erb
