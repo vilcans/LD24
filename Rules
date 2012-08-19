@@ -10,11 +10,23 @@ route '/less/*/' do
   # Ignore subdirectories of less/ (includes)
 end
 
-compile 'coffee/*' do
+compile '/coffee/*' do
   filter :coffeescript
 end
-route 'coffee/*' do
+
+# Access single coffeescript sources as JS.
+# Only for development use. In production, use /js/all/
+route '/coffee/*' do
   item.identifier.sub(/^\/coffee\//, '/js/').chop + '.js'
+end
+
+# All JavaScript sources concatenated and minified
+compile '/js/all/' do
+  filter :erb
+  filter :uglify_js
+end
+route '/js/all/' do
+  '/js/all.js'
 end
 
 compile '*' do

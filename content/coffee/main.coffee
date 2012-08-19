@@ -1,1 +1,2 @@
-console.log 'here is main'
+e = new Example
+e.hello()
