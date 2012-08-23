@@ -64,7 +64,7 @@
 <% if $concat_js %>
   <script src="/js/all.js"></script>
 <% else %>
-  <%= script_tags(coffee_items + [main_item]) %>
+  <%= script_tags(module_items + [main_item]) %>
 <% end %>
 
 <% if @site.config[:analytics_account] %>

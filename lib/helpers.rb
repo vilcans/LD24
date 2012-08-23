@@ -3,29 +3,35 @@ environment = ENV['NANOC_ENV']
 production = (environment == 'production')
 $minify_js = production
 $concat_js = $minify_js || production
+$testing = !production
 
-module Coffee
-  def coffee_re
-    %r<^/coffee/(.*)/$>
+module JavaScript
+  def js_re
+    %r<^/js/(.*)/$>
   end
 
   def test_re
-    %r<^/coffee/(.*)-spec/$>
+    %r<^/js/(.*)-spec/$>
   end
 
+  # The main module
   def main_item()
-    @items.find { |i| i.identifier == '/coffee/main/' }
+    @items.find { |i| i.identifier == '/js/main/' }
   end
 
-  def coffee_items()
+  # All "normal" code modules
+  def module_items()
     main = main_item
     @items.select do |i|
-      i.identifier =~ coffee_re and
+      i.identifier =~ js_re and
       i.identifier !~ test_re and
-      i != main
+      i.identifier != '/js/all/' and
+      i.identifier != '/js/main/' and
+      i.identifier !~ %r<^/js/libs/>
     end
   end
 
+  # Test sources (spec files)
   def test_items()
     @items.select do |i|
       i.identifier =~ test_re
@@ -33,7 +39,7 @@ module Coffee
   end
 
   def src_for_item(item)
-    item.identifier.sub coffee_re, '/js/\1.js'
+    item.identifier.chop + '.js'
   end
 
   def script_tag(item)
@@ -49,4 +55,4 @@ module Coffee
 
 end
 
-include Coffee
+include JavaScript

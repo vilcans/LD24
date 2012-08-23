@@ -10,18 +10,6 @@ route '/less/*/' do
   # Ignore subdirectories of less/ (includes)
 end
 
-compile '/coffee/*' do
-  filter :coffeescript
-end
-
-# Access single coffeescript sources as JS.
-# Only for development use. In production, use /js/all/
-route '/coffee/*' do
-  unless $concat_js
-    item.identifier.sub(/^\/coffee\//, '/js/').chop + '.js'
-  end
-end
-
 # All JavaScript sources concatenated and minified
 compile '/js/all/' do
   filter :erb
@@ -35,8 +23,32 @@ route '/js/all/' do
   end
 end
 
+# Compile CoffeeScript into JS. Don't do anything with JS.
+compile '/js/*' do
+  if item[:extension] == 'coffee'
+    filter :coffeescript
+  end
+end
+
+# Libs are always available as modules
+route '/js/libs/*' do
+  item.identifier.chop + '.js'
+end
+
+# Access single JS modules.
+# Only for development use. In production, use /js/all/
+route '/js/*' do
+  unless $concat_js
+    item.identifier.chop + '.js'
+  end
+end
+
+# Compile the test runner HTML
 compile '/test/' do
   filter :erb
+end
+unless $testing
+  route '/test/*' do end
 end
 
 compile '*' do
