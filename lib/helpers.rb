@@ -9,19 +9,44 @@ module Coffee
     %r<^/coffee/(.*)/$>
   end
 
-  def coffee_items()
-    main = @items.find { |i| i.identifier == '/coffee/main/' }
-    coffee_items = @items.select do |i|
-      i.identifier =~ coffee_re and i != main
-    end + [main]
-    return coffee_items
+  def test_re
+    %r<^/coffee/(.*)-spec/$>
   end
 
-  def src_js()
-    coffee_items.map do |i|
-      i.identifier.sub coffee_re, '/js/\1.js'
+  def main_item()
+    @items.find { |i| i.identifier == '/coffee/main/' }
+  end
+
+  def coffee_items()
+    main = main_item
+    @items.select do |i|
+      i.identifier =~ coffee_re and
+      i.identifier !~ test_re and
+      i != main
     end
   end
+
+  def test_items()
+    @items.select do |i|
+      i.identifier =~ test_re
+    end
+  end
+
+  def src_for_item(item)
+    item.identifier.sub coffee_re, '/js/\1.js'
+  end
+
+  def script_tag(item)
+    src = src_for_item(item)
+    "<script src=\"#{src}\"></script>"
+  end
+
+  def script_tags(items)
+    items.map do |item|
+      script_tag item
+    end.join ''
+  end
+
 end
 
 include Coffee

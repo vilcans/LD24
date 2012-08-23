@@ -61,16 +61,11 @@
 
 <script src="js/libs/bootstrap/bootstrap.min.js"></script>
 
-<%
-if $concat_js
-  %><script src="js/all.js"></script><%
-else
-  src_js().each do |src|
-    %><script src="<%= src %>"></script><%
-  end
-end
-%>
-
+<% if $concat_js %>
+  <script src="/js/all.js"></script>
+<% else %>
+  <%= script_tags(coffee_items + [main_item]) %>
+<% end %>
 
 <% if @site.config[:analytics_account] %>
   <script>

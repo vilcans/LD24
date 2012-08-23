@@ -63,3 +63,9 @@ Add if statement and use config for Analytics:
 Remove unneeded files:
 
     rm content/js/libs/less-1.3.0.min.js
+
+# Install new version of Jasmine
+
+Extract the files to content/test/
+Rename jasmine.js to jasmine-core.js
+Rename SpecRunner.html to test.html, move up and edit

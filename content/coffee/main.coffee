@@ -1,2 +1,2 @@
 e = new Example
-e.hello()
+alert e.hello()

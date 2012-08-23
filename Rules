@@ -35,6 +35,10 @@ route '/js/all/' do
   end
 end
 
+compile '/test/' do
+  filter :erb
+end
+
 compile '*' do
   if item[:extension] == 'html'
     filter :erb
