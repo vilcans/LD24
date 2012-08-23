@@ -61,7 +61,16 @@
 
 <script src="js/libs/bootstrap/bootstrap.min.js"></script>
 
-<script src="js/all.js"></script>
+<%
+if $concat_js
+  %><script src="js/all.js"></script><%
+else
+  src_js().each do |src|
+    %><script src="<%= src %>"></script><%
+  end
+end
+%>
+
 
 <% if @site.config[:analytics_account] %>
   <script>
