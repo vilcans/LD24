@@ -17,7 +17,7 @@ class @Game
     @graphics = new Graphics(parentElement, document.location.hash == '#stats')
     @keyboard = new Keyboard
 
-    @x = 0
+    @totalTime = 0
 
   init: (onFinished) ->
     @graphics.loadAssets =>
@@ -67,8 +67,10 @@ class @Game
 
   animate: =>
     deltaTime = FRAME_LENGTH
-    #@x += deltaTime * .0001
-    #@graphics.setCamera @x, 0, -2
+    @totalTime += deltaTime
+
+    @graphics.mesh.rotation = new THREE.Vector3(@totalTime, 0, 0)
+    @graphics.mesh.updateMatrix()
     @graphics.render()
 
   onMouseDown: (event) =>

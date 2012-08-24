@@ -17,7 +17,7 @@ class @Graphics
 
   loadAssets: (onFinished) ->
     callbacks = new Callbacks(onFinished)
-    @texture = THREE.ImageUtils.loadTexture('assets/grid.png', {},
+    @texture = THREE.ImageUtils.loadTexture('assets/f-diffuse.png', {},
       callbacks.add ->
     )
 
@@ -49,16 +49,16 @@ class @Graphics
       color: 0xffffff
       ambient: 0x333333
       shading: THREE.FlatShading
+      map: @texture
     }
 
     loader = new THREE.JSONLoader()
     loader.load(
-      'assets/box.js',
+      'assets/f.js',
       callbacks.add (geometry) =>
-        #scale = 1.0
-        #geometry.applyMatrix(new Matrix4().setScale(scale, scale, scale))
+        #geometry.applyMatrix(new THREE.Matrix4().makeScale(1, -1, 1))
         #geometry.applyMatrix(new Matrix4().setTranslation(0, 0, 1))
-        @boxGeometry = geometry
+        @geometry = geometry
     )
 
   createScene: ->
@@ -72,7 +72,7 @@ class @Graphics
       10000       # Far
     )
     #@setCamera 0, 10, -20
-    @camera.position.z = 10
+    @camera.position.z = 20
     console.log 'scene pos', @scene.position, 'dimensions', @dimensions
     @camera.lookAt @scene.position
     @scene.add @camera
@@ -98,12 +98,11 @@ class @Graphics
     )
     @scene.add @planetMesh
 
-    @boxMesh = @addBox()
+    @mesh = @addObject()
 
   # Example object
-  addBox: ->
-    #material = new THREE.MeshLambertMaterial {color: 0xFF0000}
-    mesh = new THREE.Mesh @boxGeometry, @material
+  addObject: ->
+    mesh = new THREE.Mesh @geometry, @material
     mesh.position = new Vector3(5, 0, 0)
     @scene.add mesh
     return mesh
