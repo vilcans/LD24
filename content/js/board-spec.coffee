@@ -16,8 +16,8 @@ describe 'Square', ->
     expect(square.column).toEqual COLUMN
   it 'should have a location', ->
     expect(square.location).toEqual
-      x: COLUMN - 4
-      y: ROW - 4
+      x: COLUMN - 4 + .5
+      y: ROW - 4 + .5
 
 describe 'Board', ->
   board = null
