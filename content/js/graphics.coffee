@@ -83,10 +83,8 @@ class @Graphics
       .1,         # Near
       10000       # Far
     )
-    #@setCamera 0, 10, -20
-    @camera.position.z = 20
-    console.log 'scene pos', @scene.position, 'dimensions', @dimensions
-    @camera.lookAt @scene.position
+    @camera.up = new Vector3(0, 0, 1)
+    @setCamera 2 * Math.PI * .1
     @scene.add @camera
 
     @light = new THREE.PointLight 0xFFFFFF
@@ -146,7 +144,8 @@ class @Graphics
     if @stats
       @stats.update()
 
-   setCamera: (x, y, z) ->
-     @cameraMatrix = new Matrix4()
-     @cameraMatrix.setPosition x, y, z
-     @camera.applyMatrix(@cameraMatrix)
+  setCamera: (angle) ->
+    @camera.position.x = Math.sin(angle) * 15
+    @camera.position.y = -Math.cos(angle) * 15
+    @camera.position.z = 10
+    @camera.lookAt @scene.position

@@ -24,6 +24,8 @@ class @Game
     @board.addPiece new Piece(speed: 10), @board.getSquare(0, 1)
     @board.addPiece new Piece(speed: 50), @board.getSquare(7, 7)
 
+    @cameraAngle = 0
+
   init: (onFinished) ->
     @graphics.loadAssets =>
       #@map = new Map(@graphics.waterImage)
@@ -87,6 +89,7 @@ class @Game
       piece.mesh.position.x = pos.x
       piece.mesh.position.y = pos.y
 
+    @graphics.setCamera @cameraAngle
     @graphics.render()
 
   onMouseDown: (event) =>
@@ -109,6 +112,7 @@ class @Game
       dx = x - @mouseX
       dy = y - @mouseY
       @graphics.camera.translateZ dy
+      @cameraAngle -= dx * .01
 
     @mouseX = x
     @mouseY = y
