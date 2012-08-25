@@ -1,6 +1,3 @@
-FPS = 60
-FRAME_LENGTH = 1 / FPS
-
 class @Game
   constructor: ({
     # Element which will get the game canvas as a child
@@ -61,6 +58,7 @@ class @Game
     else
       console.log 'starting animation'
       @animating = true
+      @lastFrame = Date.now()
       requestAnimationFrame @animationFrame
 
   stopAnimation: ->
@@ -78,10 +76,13 @@ class @Game
   animationFrame: =>
     if @animating
       requestAnimationFrame @animationFrame
-    @animate()
+      @animate()
 
   animate: =>
-    deltaTime = FRAME_LENGTH
+    now = Date.now()
+    deltaTime = (now - @lastFrame) / 1000
+    @lastFrame = now
+
     @board.animate deltaTime
     @totalTime += deltaTime
 

@@ -1,3 +1,7 @@
+if not Date.now
+  Date.now = ->
+    return +(new Date)
+
 $(document).ready ->
   if not Detector.webgl
     Tracking.trackEvent 'webgl', 'nodetect', nonInteraction: true
