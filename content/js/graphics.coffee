@@ -61,6 +61,13 @@ class @Graphics
         geometry.applyMatrix(new THREE.Matrix4().makeScale(scale, scale, scale))
         @geometry.pawn = geometry
     )
+    loader.load(
+      'assets/board.js',
+      callbacks.add (geometry) =>
+        #scale = .5 * .8
+        #geometry.applyMatrix(new THREE.Matrix4().makeScale(scale, scale, scale))
+        @geometry.board = geometry
+    )
 
   createScene: ->
     @renderer.setClearColorHex(0x111122, 1.0)
@@ -84,22 +91,7 @@ class @Graphics
     BOARD_THICKNESS = .25
 
     @boardMesh = new THREE.Mesh(
-      new THREE.CubeGeometry(
-        8, # width
-        8, # height
-        BOARD_THICKNESS, # depth
-        1, # segmentsWidth
-        1, # segmentsHeight
-        1, # segmentsDepth
-        # [
-        #   new THREE.MeshLambertMaterial {color: 0x555555, ambient: 0x333333, shading: THREE.FlatShading},
-        #   new THREE.MeshLambertMaterial {color: 0x0000ff, ambient: 0x333333, shading: THREE.FlatShading},
-        #   new THREE.MeshLambertMaterial {color: 0xff0000, ambient: 0x333333, shading: THREE.FlatShading},
-        #   new THREE.MeshLambertMaterial {color: 0xff00ff, ambient: 0x333333, shading: THREE.FlatShading},
-        #   new THREE.MeshLambertMaterial {color: 0x00ff00, ambient: 0x333333, shading: THREE.FlatShading},
-        #   new THREE.MeshLambertMaterial {color: 0x00ffff, ambient: 0x333333, shading: THREE.FlatShading},
-        # ]
-      )
+      @geometry.board,
       new THREE.MeshLambertMaterial {
         color: 0x88ccff
         ambient: 0x113377
