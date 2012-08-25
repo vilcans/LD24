@@ -12,12 +12,18 @@ class @Piece
     # Number of seconds into current movement
     @moveProgress = 0
 
+  interpolate: (a, b, factor) ->
+    # The length of the ease in/out depends on the total movement length.
+    # May need changing.
+    t = Math.sin(factor * Math.PI / 2)
+    return interpolate(a, b, t)
+
   getLocation: ->
     if not @square
       throw 'Cannot get position of piece without square'
     if @isMoving()
       factor = @moveProgress / @moveTime
-      return interpolate(@square.location, @toSquare.location, factor)
+      return @interpolate(@square.location, @toSquare.location, factor)
     else
       @square.location
 
