@@ -1,4 +1,5 @@
-AI_TICK_RATE = 5
+AI_TICK_RATE = .5
+MAX_DELTA_TIME = .1  # not greater than AI_TICK_RATE
 
 floor = Math.floor
 
@@ -88,7 +89,7 @@ class @Game
 
   animate: =>
     now = Date.now() / 1000
-    deltaTime = Math.min(.1, now - @lastFrame)
+    deltaTime = Math.min(MAX_DELTA_TIME, now - @lastFrame)
 
     @board.animate deltaTime
     @totalTime += deltaTime

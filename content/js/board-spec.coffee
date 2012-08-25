@@ -71,4 +71,5 @@ describe 'Board', ->
         board.getSquare(5, 2),
         board.getSquare(6, 2),
         board.getSquare(7, 2),
+        board.getSquare(0, 2),  # move backwards
       ]

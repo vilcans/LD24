@@ -42,13 +42,8 @@ class @Piece
 
   getValidMoves: (board) ->
     moves = []
-    row = @square.row
-    col = @square.column
-    loop
-      row += 1
-      sq = board.getSquareOrNull(row, col)
-      break if not sq
-      moves.push sq
+    board.appendSquaresInDirection moves, @square, 1, 0
+    board.appendSquaresInDirection moves, @square, -1, 0
     return moves
 
 Piece.BLACK = 0
@@ -103,3 +98,14 @@ class @Board
   animate: (deltaSeconds) ->
     for piece in @pieces
       piece.animate deltaSeconds
+
+  # startingSquare will not be included in results
+  appendSquaresInDirection: (targetArray, startingSquare, rowDirection, columnDirection) ->
+    row = startingSquare.row
+    col = startingSquare.column
+    loop
+      row += rowDirection
+      col += columnDirection
+      sq = @getSquareOrNull(row, col)
+      return if not sq
+      targetArray.push sq
