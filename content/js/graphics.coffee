@@ -48,30 +48,19 @@ class @Graphics
     @material = new THREE.MeshLambertMaterial {
       color: 0xffffff
       ambient: 0x333333
-      shading: THREE.FlatShading
-      map: @texture
+      shading: THREE.SmoothShading
+      #map: @texture
     }
 
-    # loader = new THREE.JSONLoader()
-    # loader.load(
-    #   'assets/f.js',
-    #   callbacks.add (geometry) =>
-    #     #geometry.applyMatrix(new THREE.Matrix4().makeScale(1, -1, 1))
-    #     #geometry.applyMatrix(new Matrix4().setTranslation(0, 0, 1))
-    #     @geometry = geometry
-    # )
-
-    @geometry = {
-      pawn: new THREE.CubeGeometry(
-        .9, # width
-        .9, # height
-        1, # depth
-        1, # segmentsWidth
-        1, # segmentsHeight
-        1, # segmentsDepth
-      )
-    }
-    @geometry.pawn.applyMatrix(new Matrix4().setPosition(new Vector3(0, 0, .5)))
+    @geometry = {}
+    loader = new THREE.JSONLoader()
+    loader.load(
+      'assets/pawn.js',
+      callbacks.add (geometry) =>
+        scale = .5 * .8
+        geometry.applyMatrix(new THREE.Matrix4().makeScale(scale, scale, scale))
+        @geometry.pawn = geometry
+    )
 
   createScene: ->
     @renderer.setClearColorHex(0x111122, 1.0)
