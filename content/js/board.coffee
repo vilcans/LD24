@@ -1,8 +1,9 @@
 
 class @Piece
   # speed: units per second
-  constructor: ({speed}) ->
+  constructor: ({team, speed}) ->
     @speed = speed ? .25
+    @team = team ? Piece.BLACK
     @toSquare = null
 
     # Total number of seconds the current movement takes
@@ -50,6 +51,9 @@ class @Piece
       moves.push sq
     return moves
 
+Piece.BLACK = 0
+Piece.WHITE = 1
+
 class @Square
   constructor: (@row, @column) ->
     # Location in world coordinates
@@ -57,7 +61,11 @@ class @Square
       x: @column - 4 + .5
       y: @row - 4 + .5
 
+  toString: ->
+    "row #{@row} column #{@column}"
+
 class @Board
+
   constructor: ->
     @pieces = []
     @squares = []
@@ -73,6 +81,9 @@ class @Board
 
   getPieces: ->
     return @pieces
+
+  getPiecesForTeam: (team) ->
+    p for p in pieces if p.team == team
 
   getSquareOrNull: (row, column) ->
     row = @squares[row]

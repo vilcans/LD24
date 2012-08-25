@@ -1,3 +1,7 @@
+AI_TICK_RATE = 5
+
+floor = Math.floor
+
 class @Game
   constructor: ({
     # Element which will get the game canvas as a child
@@ -17,7 +21,7 @@ class @Game
     @totalTime = 0
 
     @board = new Board()
-    @board.addPiece new Piece(speed: 3), @board.getSquare(0, 0)
+    @board.addPiece new Piece(team: Piece.WHITE, speed: 3), @board.getSquare(0, 0)
     @board.addPiece new Piece(speed: 10), @board.getSquare(0, 1)
     @board.addPiece new Piece(speed: 50), @board.getSquare(7, 7)
     @player = @board.getPieces()[0]
@@ -79,9 +83,8 @@ class @Game
       @animate()
 
   animate: =>
-    now = Date.now()
-    deltaTime = (now - @lastFrame) / 1000
-    @lastFrame = now
+    now = Date.now() / 1000
+    deltaTime = (now - @lastFrame)
 
     @board.animate deltaTime
     @totalTime += deltaTime
@@ -89,11 +92,22 @@ class @Game
     #@graphics.boardMesh.rotation = new THREE.Vector3(@totalTime, @totalTime * .1, @totalTime * .01)
     #@graphics.boardMesh.updateMatrix()
 
+    if (floor(now / AI_TICK_RATE) - floor(@lastFrame / AI_TICK_RATE)) != 0
+      #console.log 'Time for an AI tick'
+      for piece in @board.getPieces()
+        if piece.team == Piece.BLACK and not piece.isMoving()
+          moves = piece.getValidMoves(@board)
+          if moves.length != 0
+            move = moves[floor(Math.random() * moves.length)]
+            #console.log "Random move: #{move.toString()}"
+            piece.move move
+
     for piece in @board.getPieces()
       pos = piece.getLocation()
       piece.mesh.position.x = pos.x
       piece.mesh.position.y = pos.y
 
+    @lastFrame = now
     @graphics.setCamera @cameraAngle
     @graphics.render()
 
