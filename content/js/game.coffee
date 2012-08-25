@@ -23,8 +23,11 @@ class @Game
     @board.addPiece new Piece(speed: 3), @board.getSquare(0, 0)
     @board.addPiece new Piece(speed: 10), @board.getSquare(0, 1)
     @board.addPiece new Piece(speed: 50), @board.getSquare(7, 7)
+    @player = @board.getPieces()[0]
 
     @cameraAngle = 0
+
+    @selection = {row: null, column: null}
 
   init: (onFinished) ->
     @graphics.loadAssets =>
@@ -50,6 +53,7 @@ class @Game
       @startAnimation()
 
     $(document).keydown(@keyboard.onKeyDown).keyup(@keyboard.onKeyUp)
+    $(document).keypress(@onKeypress)
 
   startAnimation: ->
     if @animating
@@ -92,6 +96,9 @@ class @Game
     @graphics.setCamera @cameraAngle
     @graphics.render()
 
+  makeMove: (square) ->
+    @player.move square
+
   onMouseDown: (event) =>
     @dragging = true
     @mouseX = event.clientX
@@ -118,3 +125,14 @@ class @Game
     @mouseY = y
 
     event.preventDefault()
+
+  onKeypress: (event) =>
+    c = event.charCode
+    if 97 <= c <= 105
+      @selection.column = c - 97
+    if 49 <= c <= 56
+      @selection.row = c - 49
+    if @selection.column != null and @selection.row != null
+      square = @board.getSquare(@selection.row, @selection.column)
+      @selection = {row: null, column: null}
+      @makeMove square
