@@ -97,6 +97,9 @@ class @Game
     @graphics.render()
 
   makeMove: (square) ->
+    valid = @player.getValidMoves(@board)
+    if square not in valid
+      throw 'not a valid move'
     @player.move square
 
   onMouseDown: (event) =>

@@ -39,6 +39,17 @@ class @Piece
       @square = @toSquare
       @toSquare = null
 
+  getValidMoves: (board) ->
+    moves = []
+    row = @square.row
+    col = @square.column
+    loop
+      row += 1
+      sq = board.getSquareOrNull(row, col)
+      break if not sq
+      moves.push sq
+    return moves
+
 class @Square
   constructor: (@row, @column) ->
     # Location in world coordinates
@@ -63,13 +74,19 @@ class @Board
   getPieces: ->
     return @pieces
 
-  getSquare: (row, column) ->
+  getSquareOrNull: (row, column) ->
     row = @squares[row]
     if not row
-      throw "invalid square: row #{row}"
+      return null
     sq = row[column]
     if not sq
-      throw "invalid square: row #{row}, column #{column}"
+      return null
+    return sq
+
+  getSquare: (row, column) ->
+    sq = @getSquareOrNull(row, column)
+    if not sq
+      throw "No square at row '#{row}', column '#{column}'"
     return sq
 
   animate: (deltaSeconds) ->

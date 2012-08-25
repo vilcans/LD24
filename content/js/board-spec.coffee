@@ -61,3 +61,14 @@ describe 'Board', ->
       board.animate 4  # get half way there
       loc = piece.getLocation()
       expect(loc).toEqual interpolate(square.location, toSquare.location, .5)
+
+    it 'can calculate valid moves', ->
+      moves = piece.getValidMoves(board)
+      expect(moves).toEqual [
+        board.getSquare(2, 2),
+        board.getSquare(3, 2),
+        board.getSquare(4, 2),
+        board.getSquare(5, 2),
+        board.getSquare(6, 2),
+        board.getSquare(7, 2),
+      ]
