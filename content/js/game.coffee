@@ -69,8 +69,8 @@ class @Game
     deltaTime = FRAME_LENGTH
     @totalTime += deltaTime
 
-    @graphics.mesh.rotation = new THREE.Vector3(@totalTime, 0, 0)
-    @graphics.mesh.updateMatrix()
+    #@graphics.boardMesh.rotation = new THREE.Vector3(@totalTime, @totalTime * .1, @totalTime * .01)
+    #@graphics.boardMesh.updateMatrix()
     @graphics.render()
 
   onMouseDown: (event) =>

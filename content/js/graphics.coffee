@@ -62,7 +62,7 @@ class @Graphics
     )
 
   createScene: ->
-    @renderer.setClearColorHex(0x448899, 1.0)
+    @renderer.setClearColorHex(0x111122, 1.0)
     @scene = new THREE.Scene()
 
     @camera = new THREE.PerspectiveCamera(
@@ -81,22 +81,33 @@ class @Graphics
     @light.position.set(-100, 0, 100)
     @scene.add @light
 
-    @planetMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(
-        3,  # radius
-        25, # segmentsWidth
-        50,  # segmentsHeight
-        -PI / 2,  # phiStart
-        2 * PI, # phiLength
-      ),
-      #new THREE.MeshBasicMaterial {color: 0xFF0000}
+    BOARD_THICKNESS = .25
+
+    @boardMesh = new THREE.Mesh(
+      new THREE.CubeGeometry(
+        8, # width
+        8, # height
+        BOARD_THICKNESS, # depth
+        1, # segmentsWidth
+        1, # segmentsHeight
+        1, # segmentsDepth
+        # [
+        #   new THREE.MeshLambertMaterial {color: 0x555555, ambient: 0x333333, shading: THREE.FlatShading},
+        #   new THREE.MeshLambertMaterial {color: 0x0000ff, ambient: 0x333333, shading: THREE.FlatShading},
+        #   new THREE.MeshLambertMaterial {color: 0xff0000, ambient: 0x333333, shading: THREE.FlatShading},
+        #   new THREE.MeshLambertMaterial {color: 0xff00ff, ambient: 0x333333, shading: THREE.FlatShading},
+        #   new THREE.MeshLambertMaterial {color: 0x00ff00, ambient: 0x333333, shading: THREE.FlatShading},
+        #   new THREE.MeshLambertMaterial {color: 0x00ffff, ambient: 0x333333, shading: THREE.FlatShading},
+        # ]
+      )
       new THREE.MeshLambertMaterial {
-        color: 0xffffff
-        ambient: 0x333333
+        color: 0x88ccff
+        ambient: 0x113377
         shading: THREE.FlatShading
       }
     )
-    @scene.add @planetMesh
+    @boardMesh.position = new THREE.Vector3(0, -BOARD_THICKNESS / 2, 0)
+    @scene.add @boardMesh
 
     @mesh = @addObject()
 
@@ -120,7 +131,6 @@ class @Graphics
       @parentElement.appendChild @stats.domElement
 
   render: ->
-    #@planetMesh.translateX .01
     @renderer.render @scene, @camera
     if @stats
       @stats.update()
