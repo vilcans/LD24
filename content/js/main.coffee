@@ -1,7 +1,3 @@
-if not Date.now
-  Date.now = ->
-    return +(new Date)
-
 $(document).ready ->
   if not Detector.webgl
     Tracking.trackEvent 'webgl', 'nodetect', nonInteraction: true
@@ -33,3 +29,11 @@ $(document).ready ->
     label: "#{e}"
     nonInteraction: true
   alert "Got error: #{e}"
+
+# Get system time in seconds since the epoch
+if Date.now
+  @getSystemTime = ->
+    Date.now() / 1000
+else
+  @getSystemTime = ->
+    +(new Date) / 1000

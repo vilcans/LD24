@@ -63,7 +63,7 @@ class @Game
     else
       console.log 'starting animation'
       @animating = true
-      @lastFrame = Date.now()
+      @lastFrame = getSystemTime()
       requestAnimationFrame @animationFrame
 
   stopAnimation: ->
@@ -88,7 +88,7 @@ class @Game
         @stopAnimation()
 
   animate: =>
-    now = Date.now() / 1000
+    now = getSystemTime()
     deltaTime = Math.min(MAX_DELTA_TIME, now - @lastFrame)
 
     @board.animate deltaTime
