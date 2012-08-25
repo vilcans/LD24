@@ -80,7 +80,11 @@ class @Game
   animationFrame: =>
     if @animating
       requestAnimationFrame @animationFrame
-      @animate()
+      try
+        @animate()
+      catch e
+        reportError e
+        @stopAnimation()
 
   animate: =>
     now = Date.now() / 1000

@@ -26,3 +26,10 @@ $(document).ready ->
       #$('.ingame').show()
       Tracking.trackEvent 'game', 'start'
       game.start()
+
+@reportError = (e) ->
+  console.error e
+  Tracking.trackEvent 'error', 'exception',
+    label: "#{e}"
+    nonInteraction: true
+  alert "Got error: #{e}"
