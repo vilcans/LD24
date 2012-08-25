@@ -1,8 +1,8 @@
 
 class @Piece
   # speed: units per second
-  constructor: (@square=null, @speed=.25) ->
-    #@fromSquare = @square
+  constructor: ({speed}) ->
+    @speed = speed ? .25
     @toSquare = null
 
     # Total number of seconds the current movement takes
@@ -43,8 +43,8 @@ class @Square
   constructor: (@row, @column) ->
     # Location in world coordinates
     @location =
-      x: @column - 4
-      y: @row - 4
+      x: @column - 4 + .5
+      y: @row - 4 + .5
 
 class @Board
   constructor: ->
@@ -66,10 +66,10 @@ class @Board
   getSquare: (row, column) ->
     row = @squares[row]
     if not row
-      throw 'invalid square: row #{row}'
+      throw "invalid square: row #{row}"
     sq = row[column]
     if not sq
-      throw 'invalid square: row #{row}, column #{column}'
+      throw "invalid square: row #{row}, column #{column}"
     return sq
 
   animate: (deltaSeconds) ->

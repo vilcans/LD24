@@ -52,14 +52,26 @@ class @Graphics
       map: @texture
     }
 
-    loader = new THREE.JSONLoader()
-    loader.load(
-      'assets/f.js',
-      callbacks.add (geometry) =>
-        #geometry.applyMatrix(new THREE.Matrix4().makeScale(1, -1, 1))
-        #geometry.applyMatrix(new Matrix4().setTranslation(0, 0, 1))
-        @geometry = geometry
-    )
+    # loader = new THREE.JSONLoader()
+    # loader.load(
+    #   'assets/f.js',
+    #   callbacks.add (geometry) =>
+    #     #geometry.applyMatrix(new THREE.Matrix4().makeScale(1, -1, 1))
+    #     #geometry.applyMatrix(new Matrix4().setTranslation(0, 0, 1))
+    #     @geometry = geometry
+    # )
+
+    @geometry = {
+      pawn: new THREE.CubeGeometry(
+        .9, # width
+        .9, # height
+        1, # depth
+        1, # segmentsWidth
+        1, # segmentsHeight
+        1, # segmentsDepth
+      )
+    }
+    @geometry.pawn.applyMatrix(new Matrix4().setPosition(new Vector3(0, 0, .5)))
 
   createScene: ->
     @renderer.setClearColorHex(0x111122, 1.0)
@@ -81,6 +93,7 @@ class @Graphics
     @light.position.set(-100, 0, 100)
     @scene.add @light
 
+    ############################ Board
     BOARD_THICKNESS = .25
 
     @boardMesh = new THREE.Mesh(
@@ -109,12 +122,10 @@ class @Graphics
     @boardMesh.position = new THREE.Vector3(0, -BOARD_THICKNESS / 2, 0)
     @scene.add @boardMesh
 
-    @mesh = @addObject()
-
-  # Example object
-  addObject: ->
-    mesh = new THREE.Mesh @geometry, @material
-    mesh.position = new Vector3(5, 0, 0)
+  addPiece: (piece) ->
+    mesh = new THREE.Mesh @geometry.pawn, @material
+    pos = piece.getLocation()
+    mesh.position = new Vector3(pos.x, pos.y, 0)
     @scene.add mesh
     return mesh
 

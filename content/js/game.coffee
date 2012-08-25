@@ -19,6 +19,11 @@ class @Game
 
     @totalTime = 0
 
+    @board = new Board()
+    @board.addPiece new Piece(speed: 3), @board.getSquare(0, 0)
+    @board.addPiece new Piece(speed: 10), @board.getSquare(0, 1)
+    @board.addPiece new Piece(speed: 50), @board.getSquare(7, 7)
+
   init: (onFinished) ->
     @graphics.loadAssets =>
       #@map = new Map(@graphics.waterImage)
@@ -27,6 +32,10 @@ class @Game
   start: ->
     @graphics.createScene()
     @graphics.start()
+
+    for piece in @board.getPieces()
+      piece.mesh = @graphics.addPiece(piece)
+
     $(@graphics.renderer.domElement)
       .mousedown(@onMouseDown)
       .click(@onMouseClick)
@@ -67,10 +76,17 @@ class @Game
 
   animate: =>
     deltaTime = FRAME_LENGTH
+    @board.animate deltaTime
     @totalTime += deltaTime
 
     #@graphics.boardMesh.rotation = new THREE.Vector3(@totalTime, @totalTime * .1, @totalTime * .01)
     #@graphics.boardMesh.updateMatrix()
+
+    for piece in @board.getPieces()
+      pos = piece.getLocation()
+      piece.mesh.position.x = pos.x
+      piece.mesh.position.y = pos.y
+
     @graphics.render()
 
   onMouseDown: (event) =>
