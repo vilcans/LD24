@@ -88,7 +88,7 @@ class @Game
 
   animate: =>
     now = Date.now() / 1000
-    deltaTime = (now - @lastFrame)
+    deltaTime = Math.min(.1, now - @lastFrame)
 
     @board.animate deltaTime
     @totalTime += deltaTime
