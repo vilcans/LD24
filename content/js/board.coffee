@@ -15,7 +15,7 @@ class @Piece
   interpolate: (a, b, factor) ->
     # The length of the ease in/out depends on the total movement length.
     # May need changing.
-    t = Math.sin(factor * Math.PI / 2)
+    t = Math.sin(factor * factor * Math.PI / 2)
     return interpolate(a, b, t)
 
   getLocation: ->
