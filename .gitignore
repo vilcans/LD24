@@ -3,3 +3,5 @@ crash.log
 site/
 tmp/
 *.sublime-workspace
+releases.git/
+*.pyc

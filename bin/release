@@ -1,0 +1,23 @@
+#!/bin/bash
+
+export RELEASES_MASTER_REPO=filur:releases/LD24.git
+export GIT_WORK_TREE=$PWD
+export GIT_DIR=$PWD/releases.git
+
+if [ ! -e $GIT_DIR ]; then
+  git clone --bare $RELEASES_MASTER_REPO $GIT_DIR
+fi
+git config core.bare false
+git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+git fetch
+git reset --mixed origin/master  # fast-forward
+
+git status
+git add -fA site/ nginx.conf
+git status
+echo 'Starting a shell so you can look around. Exit the shell to continue.'
+bash
+echo 'Press enter to make the release'
+read
+git commit
+git push origin
