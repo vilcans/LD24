@@ -46,6 +46,8 @@ class @Piece
     if @moveProgress >= @moveTime
       @square = @toSquare
       @toSquare = null
+      if @team == Piece.WHITE
+        Audio.play 'move-stop'
 
   getValidMoves: (board) ->
     moves = []

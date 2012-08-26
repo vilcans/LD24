@@ -110,6 +110,7 @@ class @Game
           moves = piece.getValidMoves(@board)
           for move in moves
             if move == playerSquare
+              Audio.play 'move-start'
               piece.move move
               break
 
@@ -142,6 +143,8 @@ class @Game
         @board.removePiece b
         @graphics.destroyPiece a.mesh
         @graphics.destroyPiece b.mesh
+
+        Audio.play 'destroy'
         # pieces is not valid any more, wait for nest tick to check for more collisions
         return
     return
@@ -150,6 +153,7 @@ class @Game
     valid = @player.getValidMoves(@board)
     if square not in valid
       throw 'not a valid move'
+    Audio.play 'move-start'
     @player.move square
 
   onMouseDown: (event) =>
