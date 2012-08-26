@@ -17,7 +17,7 @@ class @Graphics
 
   loadAssets: (onFinished) ->
     callbacks = new Callbacks(onFinished)
-    @texture = THREE.ImageUtils.loadTexture('assets/f-diffuse.png', {},
+    @boardTexture = THREE.ImageUtils.loadTexture('assets/board-diffuse.png', {},
       callbacks.add ->
     )
 
@@ -93,17 +93,16 @@ class @Graphics
     @scene.add @light
 
     ############################ Board
-    BOARD_THICKNESS = .25
 
     @boardMesh = new THREE.Mesh(
       @geometry.board,
       new THREE.MeshLambertMaterial {
-        color: 0x88ccff
+        color: 0xffffff
         ambient: 0x113377
         shading: THREE.FlatShading
+        map: @boardTexture
       }
     )
-    @boardMesh.position = new THREE.Vector3(0, -BOARD_THICKNESS / 2, 0)
     @scene.add @boardMesh
 
   addPiece: (piece) ->
