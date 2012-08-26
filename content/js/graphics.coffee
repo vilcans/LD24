@@ -50,11 +50,17 @@ class @Graphics
     #       texture: @texture
     # )
 
-    @material = new THREE.MeshLambertMaterial {
-      color: 0xffffff
+    @materials = {}
+    @materials[Piece.WHITE] = new THREE.MeshLambertMaterial {
+      color: 0xeeddcc
       ambient: 0x333333
       shading: THREE.SmoothShading
       #map: @texture
+    }
+    @materials[Piece.BLACK] = new THREE.MeshLambertMaterial {
+      color: 0x111122
+      ambient: 0x333333
+      shading: THREE.SmoothShading
     }
 
     @geometry = {}
@@ -128,7 +134,7 @@ class @Graphics
     @scene.add @boardMesh
 
   addPiece: (piece) ->
-    mesh = new THREE.Mesh @geometry[piece.type], @material
+    mesh = new THREE.Mesh @geometry[piece.type], @materials[piece.team]
     pos = piece.getLocation()
     mesh.position = new Vector3(pos.x, pos.y, 0)
     mesh.castShadow = true
