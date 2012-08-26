@@ -1,10 +1,11 @@
 
 class @Piece
   # speed: units per second
-  constructor: ({type, team, speed}) ->
+  constructor: ({type, team, speed, onMoveFinished}) ->
     @type = type ? 'pawn'
     @speed = speed ? .25
     @team = team ? Piece.BLACK
+    @onMoveFinished = onMoveFinished ? (piece) ->
     @toSquare = null
 
     # Total number of seconds the current movement takes
@@ -46,8 +47,7 @@ class @Piece
     if @moveProgress >= @moveTime
       @square = @toSquare
       @toSquare = null
-      if @team == Piece.WHITE
-        Audio.play 'move-stop'
+      @onMoveFinished this
 
   getValidMoves: (board) ->
     moves = []

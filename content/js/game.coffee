@@ -26,7 +26,13 @@ class @Game
     @totalTime = 0
 
     @board = new Board()
-    @player = new Piece(type: 'pawn', team: Piece.WHITE, speed: 3)
+    @player = new Piece(
+      type: 'pawn',
+      team: Piece.WHITE,
+      speed: 3,
+      onMoveFinished: (piece) =>
+        Audio.play 'move-stop'
+    )
     @board.addPiece @player, @board.getSquare(0, 0)
     @board.addPiece new Piece(type: 'bishop', speed: 10), @board.getSquare(0, 1)
     @board.addPiece new Piece(type: 'rook', speed: 5), @board.getSquare(7, 7)
