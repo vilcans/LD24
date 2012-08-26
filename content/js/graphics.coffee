@@ -129,8 +129,10 @@ class @Graphics
     if @stats
       @stats.update()
 
-  setCamera: (angle) ->
-    @camera.position.x = Math.sin(angle) * 15
-    @camera.position.y = -Math.cos(angle) * 15
-    @camera.position.z = 10
+  setCamera: (angle, distance) ->
+    @camera.position.set(
+      Math.sin(angle) * distance,
+      -Math.cos(angle) * distance,
+      10
+    )
     @camera.lookAt @scene.position

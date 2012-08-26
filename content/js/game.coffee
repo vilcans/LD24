@@ -28,6 +28,7 @@ class @Game
     @player = @board.getPieces()[0]
 
     @cameraAngle = 0
+    @cameraDistance = 50
 
     @selection = {row: null, column: null}
 
@@ -113,7 +114,7 @@ class @Game
       piece.mesh.position.y = pos.y
 
     @lastFrame = now
-    @graphics.setCamera @cameraAngle
+    @graphics.setCamera @cameraAngle, @cameraDistance
     @graphics.render()
 
   makeMove: (square) ->
@@ -141,7 +142,7 @@ class @Game
     if @dragging
       dx = x - @mouseX
       dy = y - @mouseY
-      @graphics.camera.translateZ dy
+      @cameraDistance += dy
       @cameraAngle -= dx * .01
 
     @mouseX = x
