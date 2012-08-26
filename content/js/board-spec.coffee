@@ -43,7 +43,7 @@ describe 'Board', ->
     SPEED = .25
 
     beforeEach ->
-      piece = new Piece(speed=SPEED)
+      piece = new Piece(type='pawn', speed=SPEED)
       square = board.getSquare(ROW, COLUMN)
       board.addPiece piece, square
 
@@ -66,10 +66,4 @@ describe 'Board', ->
       moves = piece.getValidMoves(board)
       expect(moves).toEqual [
         board.getSquare(2, 2),
-        board.getSquare(3, 2),
-        board.getSquare(4, 2),
-        board.getSquare(5, 2),
-        board.getSquare(6, 2),
-        board.getSquare(7, 2),
-        board.getSquare(0, 2),  # move backwards
       ]

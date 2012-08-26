@@ -54,7 +54,7 @@ class @Piece
 
 validMovesFunctions =
   pawn: (moves, square, board) ->
-    board.appendSquaresInDirection moves, square, 1, 0
+    board.appendSquaresInDirection moves, square, 1, 0, 1
 
   rook: (moves, square, board) ->
     board.appendSquaresInDirection moves, square, 1, 0
@@ -127,12 +127,13 @@ class @Board
       piece.animate deltaSeconds
 
   # startingSquare will not be included in results
-  appendSquaresInDirection: (targetArray, startingSquare, rowDirection, columnDirection) ->
+  appendSquaresInDirection: (targetArray, startingSquare, rowDirection, columnDirection, max=1e6) ->
     row = startingSquare.row
     col = startingSquare.column
-    loop
+    while max > 0
       row += rowDirection
       col += columnDirection
       sq = @getSquareOrNull(row, col)
       return if not sq
       targetArray.push sq
+      --max
