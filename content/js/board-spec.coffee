@@ -60,7 +60,7 @@ describe 'Board', ->
       piece.move toSquare
       board.animate 4  # get half way there
       loc = piece.getLocation()
-      expect(loc).toEqual interpolate(square.location, toSquare.location, .5)
+      expect(loc).toEqual piece.interpolate(square.location, toSquare.location, .5)
 
     it 'can calculate valid moves', ->
       moves = piece.getValidMoves(board)
