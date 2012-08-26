@@ -23,6 +23,13 @@ route '/js/all/' do
   end
 end
 
+compile '/js/levels/' do
+  filter :levels
+end
+route '/js/levels/' do
+  '/js/levels.js'
+end
+
 # Compile CoffeeScript into JS. Don't do anything with JS.
 compile '/js/*' do
   if item[:extension] == 'coffee'

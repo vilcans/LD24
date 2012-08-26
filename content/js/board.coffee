@@ -3,7 +3,7 @@ class @Piece
   # speed: units per second
   constructor: ({type, team, speed, onMoveFinished}) ->
     @type = type ? 'pawn'
-    @speed = speed ? .25
+    @speed = speed ? 1
     @team = team ? Piece.BLACK
     @onMoveFinished = onMoveFinished ? (piece) ->
     @toSquare = null
@@ -51,29 +51,56 @@ class @Piece
 
   getValidMoves: (board) ->
     moves = []
-    validMovesFunctions[@type](moves, @square, board)
+
+    f = validMovesFunctions[@type]
+    if not f
+      throw "No move function: #{@type}"
+    f(moves, this, @square, board)
     return moves
 
 validMovesFunctions =
-  pawn: (moves, square, board) ->
-    board.appendSquaresInDirection moves, square, 1, 0, 1
+  pawn: (moves, piece, square, board) ->
+    if piece.team == Piece.WHITE
+      board.appendSquaresInDirection moves, square, 1, 0, 1
+    else
+      board.appendSquaresInDirection moves, square, -1, 0, 1
 
-  rook: (moves, square, board) ->
+  rook: (moves, piece, square, board) ->
     board.appendSquaresInDirection moves, square, 1, 0
     board.appendSquaresInDirection moves, square, -1, 0
     board.appendSquaresInDirection moves, square, 0, 1
     board.appendSquaresInDirection moves, square, 0, -1
 
-  bishop: (moves, square, board) ->
+  bishop: (moves, piece, square, board) ->
     board.appendSquaresInDirection moves, square, 1, 1
     board.appendSquaresInDirection moves, square, 1, -1
     board.appendSquaresInDirection moves, square, -1, 1
     board.appendSquaresInDirection moves, square, -1, -1
 
-  queen: (moves, square, board) ->
-    validMovesFunctions.rook moves, square, board
-    validMovesFunctions.bishop moves, square, board
+  king: (moves, piece, square, board) ->
+    board.appendSquaresInDirection moves, square, -1, -1, 1
+    board.appendSquaresInDirection moves, square, -1, 0, 1
+    board.appendSquaresInDirection moves, square, -1, 1, 1
+    board.appendSquaresInDirection moves, square, 0, -1, 1
+    board.appendSquaresInDirection moves, square, 0, 0, 1
+    board.appendSquaresInDirection moves, square, 0, 1, 1
+    board.appendSquaresInDirection moves, square, 1, -1, 1
+    board.appendSquaresInDirection moves, square, 1, 0, 1
+    board.appendSquaresInDirection moves, square, 1, 1, 1
 
+  knight: (moves, piece, square, board) ->
+    board.appendSquaresInDirection moves, square, 2, 1, 1
+    board.appendSquaresInDirection moves, square, 2, -1, 1
+    board.appendSquaresInDirection moves, square, -2, 1, 1
+    board.appendSquaresInDirection moves, square, -2, -1, 1
+    board.appendSquaresInDirection moves, square, 1, 2, 1
+    board.appendSquaresInDirection moves, square, 1, -2, 1
+    board.appendSquaresInDirection moves, square, -1, 2, 1
+    board.appendSquaresInDirection moves, square, -1, -2, 1
+
+  queen: (moves, piece, square, board) ->
+    validMovesFunctions.rook moves, piece, square, board
+    validMovesFunctions.bishop moves, piece, square, board
 
 Piece.BLACK = 0
 Piece.WHITE = 1

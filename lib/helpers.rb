@@ -56,3 +56,12 @@ module JavaScript
 end
 
 include JavaScript
+
+
+class LevelsFilter < Nanoc::Filter
+  identifier :levels
+  type :text
+  def run(content, params={})
+    `echo "#{content}" | bin/make-levels.py`
+  end
+end

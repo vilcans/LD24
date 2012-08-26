@@ -23,23 +23,22 @@ class @Game
 
     @totalTime = 0
 
-    @board = new Board()
-    @player = new Piece(
-      type: 'pawn',
-      team: Piece.WHITE,
-      speed: 3,
-      onMoveFinished: (piece) =>
-        Audio.play 'move-stop'
-        @think()
-    )
-    @board.addPiece @player, @board.getSquare(0, 0)
-    @board.addPiece new Piece(type: 'bishop', speed: 7), @board.getSquare(0, 2)
-    @board.addPiece new Piece(type: 'rook', speed: 5), @board.getSquare(7, 7)
-
     @cameraAngle = 0
     @cameraDistance = 10
 
     @selection = {row: null, column: null}
+
+    @loadLevel 1
+
+  loadLevel: (number) ->
+    @board = new Board()
+
+    levels[number](@board)
+
+    @player = @board.getPiecesForTeam(Piece.WHITE)[0]
+    @player.onMoveFinished = (piece) =>
+      Audio.play 'move-stop'
+      @think()
 
   init: (onFinished) ->
     @graphics.loadAssets =>
