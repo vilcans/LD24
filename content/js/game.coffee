@@ -1,6 +1,4 @@
-AI_TICK_RATE = .5
-
-MAX_DELTA_TIME = .1  # not greater than AI_TICK_RATE, etc.
+MAX_DELTA_TIME = .1
 
 PIECE_RADIUS = .8
 PIECE_RADIUS_SQUARED = PIECE_RADIUS * PIECE_RADIUS
@@ -32,9 +30,10 @@ class @Game
       speed: 3,
       onMoveFinished: (piece) =>
         Audio.play 'move-stop'
+        @think()
     )
     @board.addPiece @player, @board.getSquare(0, 0)
-    @board.addPiece new Piece(type: 'bishop', speed: 10), @board.getSquare(0, 1)
+    @board.addPiece new Piece(type: 'bishop', speed: 7), @board.getSquare(0, 2)
     @board.addPiece new Piece(type: 'rook', speed: 5), @board.getSquare(7, 7)
 
     @cameraAngle = 0
@@ -108,18 +107,6 @@ class @Game
     #@graphics.boardMesh.rotation = new THREE.Vector3(@totalTime, @totalTime * .1, @totalTime * .01)
     #@graphics.boardMesh.updateMatrix()
 
-    if (floor(now / AI_TICK_RATE) - floor(@lastFrame / AI_TICK_RATE)) != 0
-      #console.log 'Time for an AI tick'
-      playerSquare = @player.square  # what about toSquare? mind reading?
-      for piece in @board.getPiecesForTeam(Piece.BLACK)
-        if not piece.isMoving()
-          moves = piece.getValidMoves(@board)
-          for move in moves
-            if move == playerSquare
-              Audio.play 'move-start'
-              piece.move move
-              break
-
     @checkCollisions()
 
     for piece in @board.getPieces()
@@ -131,6 +118,17 @@ class @Game
     @graphics.animate deltaTime
     @graphics.setCamera @cameraAngle, @cameraDistance
     @graphics.render()
+
+  think: ->
+      playerSquare = @player.square  # what about toSquare? mind reading?
+      for piece in @board.getPiecesForTeam(Piece.BLACK)
+        if not piece.isMoving()
+          moves = piece.getValidMoves(@board)
+          for move in moves
+            if move == playerSquare
+              Audio.play 'move-start'
+              piece.move move
+              break
 
   checkCollisions: ->
     pieces = @board.getPieces()
