@@ -1,5 +1,9 @@
 AI_TICK_RATE = .5
-MAX_DELTA_TIME = .1  # not greater than AI_TICK_RATE
+
+MAX_DELTA_TIME = .1  # not greater than AI_TICK_RATE, etc.
+
+PIECE_RADIUS = .8
+PIECE_RADIUS_SQUARED = PIECE_RADIUS * PIECE_RADIUS
 
 floor = Math.floor
 
@@ -108,6 +112,8 @@ class @Game
             #console.log "Random move: #{move.toString()}"
             piece.move move
 
+    @checkCollisions()
+
     for piece in @board.getPieces()
       pos = piece.getLocation()
       piece.mesh.position.x = pos.x
@@ -116,6 +122,27 @@ class @Game
     @lastFrame = now
     @graphics.setCamera @cameraAngle, @cameraDistance
     @graphics.render()
+
+  checkCollisions: ->
+    pieces = @board.getPieces()
+    for a in pieces
+      for b in pieces
+        if a == b
+          continue
+        #if not a.isMoving() and not b.isMoving()
+        #  continue
+        apos = a.getLocation()
+        bpos = b.getLocation()
+        d = distanceSquared(apos, bpos)
+        if d > PIECE_RADIUS_SQUARED
+          continue
+        @board.removePiece a
+        @board.removePiece b
+        @graphics.destroyPiece a.mesh
+        @graphics.destroyPiece b.mesh
+        # pieces is not valid any more, wait for nest tick to check for more collisions
+        return
+    return
 
   makeMove: (square) ->
     valid = @player.getValidMoves(@board)

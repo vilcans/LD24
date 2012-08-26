@@ -101,6 +101,13 @@ class @Board
     piece.square = square
     @pieces.push piece
 
+  removePiece: (pieceToRemove) ->
+    for i, p of @pieces
+      if p == pieceToRemove
+        @pieces.splice i, 1
+        return
+    throw "Piece not found to remove: #{pieceToRemove}"
+
   getPieces: ->
     return @pieces
 

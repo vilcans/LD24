@@ -132,8 +132,8 @@ class @Graphics
     @scene.add mesh
     return mesh
 
-  #removeMesh: (mesh) ->
-  #  @scene.remove mesh
+  destroyPiece: (mesh) ->
+    @scene.remove mesh
 
   start: ->
     @parentElement.appendChild @renderer.domElement

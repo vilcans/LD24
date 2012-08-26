@@ -57,6 +57,11 @@ describe 'Board', ->
       expect(board.getPiecesForTeam(Piece.WHITE)).toEqual [piece], 'white piece'
       expect(board.getPiecesForTeam(Piece.BLACK)).toEqual [piece2], 'black piece'
 
+    it 'can remove a piece', ->
+      board.removePiece piece
+      expect(board.getPieces()).toEqual [], 'no pieces left'
+      expect(board.getPiecesForTeam(Piece.WHITE)).toEqual [], 'no white pieces left'
+
     it 'sets the location of the piece', ->
       loc = piece.getLocation()
       expect(loc).toEqual square.location
