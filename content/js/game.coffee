@@ -40,6 +40,10 @@ class @Game
       Audio.play 'move-stop'
       @think()
 
+    for piece in @board.getPiecesForTeam(Piece.BLACK)
+      piece.onMoveFinished = (piece) =>
+        @think()
+
   init: (onFinished) ->
     @graphics.loadAssets =>
       #@map = new Map(@graphics.waterImage)
