@@ -22,9 +22,9 @@ class @Game
     @totalTime = 0
 
     @board = new Board()
-    @board.addPiece new Piece(team: Piece.WHITE, speed: 3), @board.getSquare(0, 0)
-    @board.addPiece new Piece(speed: 10), @board.getSquare(0, 1)
-    @board.addPiece new Piece(speed: 50), @board.getSquare(7, 7)
+    @board.addPiece new Piece(type: 'pawn', team: Piece.WHITE, speed: 3), @board.getSquare(0, 0)
+    @board.addPiece new Piece(type: 'bishop', speed: 10), @board.getSquare(0, 1)
+    @board.addPiece new Piece(type: 'rook', speed: 5), @board.getSquare(7, 7)
     @player = @board.getPieces()[0]
 
     @cameraAngle = 0

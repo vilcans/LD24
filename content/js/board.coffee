@@ -1,7 +1,8 @@
 
 class @Piece
   # speed: units per second
-  constructor: ({team, speed}) ->
+  constructor: ({type, team, speed}) ->
+    @type = type ? 'pawn'
     @speed = speed ? .25
     @team = team ? Piece.BLACK
     @toSquare = null
@@ -48,9 +49,29 @@ class @Piece
 
   getValidMoves: (board) ->
     moves = []
-    board.appendSquaresInDirection moves, @square, 1, 0
-    board.appendSquaresInDirection moves, @square, -1, 0
+    validMovesFunctions[@type](moves, @square, board)
     return moves
+
+validMovesFunctions =
+  pawn: (moves, square, board) ->
+    board.appendSquaresInDirection moves, square, 1, 0
+
+  rook: (moves, square, board) ->
+    board.appendSquaresInDirection moves, square, 1, 0
+    board.appendSquaresInDirection moves, square, -1, 0
+    board.appendSquaresInDirection moves, square, 0, 1
+    board.appendSquaresInDirection moves, square, 0, -1
+
+  bishop: (moves, square, board) ->
+    board.appendSquaresInDirection moves, square, 1, 1
+    board.appendSquaresInDirection moves, square, 1, -1
+    board.appendSquaresInDirection moves, square, -1, 1
+    board.appendSquaresInDirection moves, square, -1, -1
+
+  queen: (moves, square, board) ->
+    validMovesFunctions.rook moves, square, board
+    validMovesFunctions.bishop moves, square, board
+
 
 Piece.BLACK = 0
 Piece.WHITE = 1
