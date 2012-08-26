@@ -54,20 +54,25 @@ class @Graphics
 
     @geometry = {}
     loader = new THREE.JSONLoader()
-    loader.load(
-      'assets/pawn.js',
-      callbacks.add (geometry) =>
-        scale = .5 * .8
-        geometry.applyMatrix(new THREE.Matrix4().makeScale(scale, scale, scale))
-        @geometry.pawn = geometry
-    )
-    loader.load(
-      'assets/board.js',
-      callbacks.add (geometry) =>
-        #scale = .5 * .8
-        #geometry.applyMatrix(new THREE.Matrix4().makeScale(scale, scale, scale))
-        @geometry.board = geometry
-    )
+
+    meshes =
+      pawn: { scale: .5 * .8 }
+      bishop: { scale: .5 * .8 }
+      rook: { scale: .5 * .8 }
+      board: { scale: 1 }
+
+    for name of meshes
+      console.log "Loading #{name}"
+      loader.load(
+        "assets/#{name}.js",
+        (
+          (name) => callbacks.add (geometry) =>
+            console.log "Loaded #{name}", geometry
+            scale = meshes[name].scale
+            geometry.applyMatrix(new THREE.Matrix4().makeScale(scale, scale, scale))
+            @geometry[name] = geometry
+        )(name)
+      )
 
   createScene: ->
     @renderer.setClearColorHex(0x111122, 1.0)
@@ -102,7 +107,7 @@ class @Graphics
     @scene.add @boardMesh
 
   addPiece: (piece) ->
-    mesh = new THREE.Mesh @geometry.pawn, @material
+    mesh = new THREE.Mesh @geometry[piece.type], @material
     pos = piece.getLocation()
     mesh.position = new Vector3(pos.x, pos.y, 0)
     @scene.add mesh
