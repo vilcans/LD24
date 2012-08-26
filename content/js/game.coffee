@@ -121,6 +121,7 @@ class @Game
       piece.mesh.position.y = pos.y
 
     @lastFrame = now
+    @graphics.animate deltaTime
     @graphics.setCamera @cameraAngle, @cameraDistance
     @graphics.render()
 

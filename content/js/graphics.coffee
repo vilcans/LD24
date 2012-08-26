@@ -4,6 +4,8 @@ Vector3 = THREE.Vector3
 Matrix4 = THREE.Matrix4
 ORIGIN = new Vector3(0, 0, 0)
 
+DESTROY_ANIMATION_LENGTH = .7
+
 class @Graphics
   constructor: (parentElement, enableStats) ->
     @parentElement = parentElement
@@ -15,6 +17,8 @@ class @Graphics
     @renderer.shadowMapSoft = true
     if enableStats
       @stats = new Stats()
+
+    @dyingPieces = []
 
   loadAssets: (onFinished) ->
     callbacks = new Callbacks(onFinished)
@@ -133,7 +137,11 @@ class @Graphics
     return mesh
 
   destroyPiece: (mesh) ->
-    @scene.remove mesh
+    mesh.destruction =
+      time: getSystemTime()
+      rotationSpeedX: (Math.random() * 4 - 2) * Math.PI * 2
+      rotationSpeedY: (Math.random() * 4 - 2) * Math.PI * 2
+    @dyingPieces.push mesh
 
   start: ->
     @parentElement.appendChild @renderer.domElement
@@ -143,6 +151,22 @@ class @Graphics
       @stats.domElement.style.top = '0px';
       @stats.domElement.style.right = '0px';
       @parentElement.appendChild @stats.domElement
+
+  animate: (deltaTime) ->
+    now = getSystemTime()
+    i = 0
+    while i < @dyingPieces.length
+      piece = @dyingPieces[i]
+      age = now - piece.destruction.time
+      if age > DESTROY_ANIMATION_LENGTH
+        @dyingPieces.splice i, 1
+        @scene.remove piece
+      else
+        piece.position.z = 15 * Math.sin(
+          age / DESTROY_ANIMATION_LENGTH * Math.PI / 2)
+        piece.rotation.x = age * piece.destruction.rotationSpeedX
+        piece.rotation.y = age * piece.destruction.rotationSpeedY
+        i++
 
   render: ->
     @renderer.render @scene, @camera
