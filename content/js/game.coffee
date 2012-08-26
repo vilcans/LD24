@@ -104,13 +104,14 @@ class @Game
 
     if (floor(now / AI_TICK_RATE) - floor(@lastFrame / AI_TICK_RATE)) != 0
       #console.log 'Time for an AI tick'
+      playerSquare = @player.square  # what about toSquare? mind reading?
       for piece in @board.getPiecesForTeam(Piece.BLACK)
         if not piece.isMoving()
           moves = piece.getValidMoves(@board)
-          if moves.length != 0
-            move = moves[floor(Math.random() * moves.length)]
-            #console.log "Random move: #{move.toString()}"
-            piece.move move
+          for move in moves
+            if move == playerSquare
+              piece.move move
+              break
 
     @checkCollisions()
 
