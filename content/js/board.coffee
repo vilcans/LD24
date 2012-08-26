@@ -105,7 +105,7 @@ class @Board
     return @pieces
 
   getPiecesForTeam: (team) ->
-    p for p in pieces if p.team == team
+    p for p in @pieces when p.team == team
 
   getSquareOrNull: (row, column) ->
     row = @squares[row]

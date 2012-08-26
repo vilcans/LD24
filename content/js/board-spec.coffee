@@ -43,12 +43,19 @@ describe 'Board', ->
     SPEED = .25
 
     beforeEach ->
-      piece = new Piece(type='pawn', speed=SPEED)
+      piece = new Piece(type: 'pawn', speed: SPEED, team: Piece.WHITE)
       square = board.getSquare(ROW, COLUMN)
       board.addPiece piece, square
 
     it 'can get the pieces', ->
       expect(board.getPieces()).toEqual [piece]
+
+    it 'can get pieces for a team', ->
+      piece2 = new Piece(team: Piece.BLACK)
+      board.addPiece piece2, board.getSquare(ROW, COLUMN)
+
+      expect(board.getPiecesForTeam(Piece.WHITE)).toEqual [piece], 'white piece'
+      expect(board.getPiecesForTeam(Piece.BLACK)).toEqual [piece2], 'black piece'
 
     it 'sets the location of the piece', ->
       loc = piece.getLocation()

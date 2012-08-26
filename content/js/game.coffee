@@ -22,13 +22,13 @@ class @Game
     @totalTime = 0
 
     @board = new Board()
-    @board.addPiece new Piece(type: 'pawn', team: Piece.WHITE, speed: 3), @board.getSquare(0, 0)
+    @player = new Piece(type: 'pawn', team: Piece.WHITE, speed: 3)
+    @board.addPiece @player, @board.getSquare(0, 0)
     @board.addPiece new Piece(type: 'bishop', speed: 10), @board.getSquare(0, 1)
     @board.addPiece new Piece(type: 'rook', speed: 5), @board.getSquare(7, 7)
-    @player = @board.getPieces()[0]
 
     @cameraAngle = 0
-    @cameraDistance = 50
+    @cameraDistance = 10
 
     @selection = {row: null, column: null}
 
@@ -100,8 +100,8 @@ class @Game
 
     if (floor(now / AI_TICK_RATE) - floor(@lastFrame / AI_TICK_RATE)) != 0
       #console.log 'Time for an AI tick'
-      for piece in @board.getPieces()
-        if piece.team == Piece.BLACK and not piece.isMoving()
+      for piece in @board.getPiecesForTeam(Piece.BLACK)
+        if not piece.isMoving()
           moves = piece.getValidMoves(@board)
           if moves.length != 0
             move = moves[floor(Math.random() * moves.length)]
