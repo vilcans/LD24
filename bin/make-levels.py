@@ -2,6 +2,7 @@
 
 import yaml
 import sys
+import json
 
 #levels = yaml.load_all(open('content/levels.yaml'))
 levels = yaml.load_all(sys.stdin)
@@ -40,4 +41,7 @@ for number, data in enumerate(levels, 1):
                 type, team, r, c
             )
 
+    print 'return %s;' % json.dumps({
+        'description': data['description']
+    })
     print '}'

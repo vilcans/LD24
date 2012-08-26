@@ -31,7 +31,7 @@ class @Game
   loadLevel: (number) ->
     @board = new Board()
 
-    levels[number](@board)
+    data = levels[number](@board)
 
     @player = @board.getPiecesForTeam(Piece.WHITE)[0]
     @player.onMoveFinished = (piece) =>
@@ -41,6 +41,8 @@ class @Game
     for piece in @board.getPiecesForTeam(Piece.BLACK)
       piece.onMoveFinished = (piece) =>
         @think()
+
+    $('#description').html(data.description)
 
   init: (onFinished) ->
     @graphics.loadAssets =>
