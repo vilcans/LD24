@@ -28,8 +28,6 @@ class @Game
 
     @selection = {row: null, column: null}
 
-    @loadLevel 1
-
   loadLevel: (number) ->
     @board = new Board()
 
