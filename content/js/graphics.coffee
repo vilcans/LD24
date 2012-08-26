@@ -11,7 +11,8 @@ class @Graphics
     @dimensions = new THREE.Vector2(
       parentElement.clientWidth, parentElement.clientHeight)
     @renderer.setSize @dimensions.x, @dimensions.y
-
+    @renderer.shadowMapEnabled = true
+    @renderer.shadowMapSoft = true
     if enableStats
       @stats = new Stats()
 
@@ -88,9 +89,24 @@ class @Graphics
     @setCamera 2 * Math.PI * .1
     @scene.add @camera
 
-    @light = new THREE.PointLight 0xFFFFFF
-    @light.position.set(-100, 0, 100)
+    @light = new THREE.SpotLight(
+      0xffeecc,
+      1,  # intensity
+      100,  # distance,
+      #2 / 360 * Math.PI * 2  # angle
+    )
+    @light.castShadow = true
+    @light.shadowDarkness = .5
+    @light.shadowCameraVisible = true
+    @light.shadowCameraNear = 20
+    @light.shadowCameraFar = 30
+    #@light.shadowMapWidth = 2048
+    #@light.shadowMapHeight = 2048
+    @light.position.set(-5, -10, 20)
+
     @scene.add @light
+
+    @scene.add new THREE.AmbientLight(0x081018)
 
     ############################ Board
 
@@ -103,12 +119,16 @@ class @Graphics
         map: @boardTexture
       }
     )
+    @boardMesh.castShadow = false
+    @boardMesh.receiveShadow = true
     @scene.add @boardMesh
 
   addPiece: (piece) ->
     mesh = new THREE.Mesh @geometry[piece.type], @material
     pos = piece.getLocation()
     mesh.position = new Vector3(pos.x, pos.y, 0)
+    mesh.castShadow = true
+    mesh.receiveShadow = true
     @scene.add mesh
     return mesh
 
