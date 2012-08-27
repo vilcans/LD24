@@ -118,13 +118,8 @@ class @Graphics
 
     @scene.add @light
 
-    @fillLight = new THREE.PointLight(0xcceeff, .2)
-    @fillLight.position.set(10, 0, 1)
-    @light.castShadow = true
-    @light.shadowDarkness = .5
-    #@light.shadowCameraVisible = true
-    @light.shadowCameraNear = 1
-    @light.shadowCameraFar = 15
+    @fillLight = new THREE.PointLight(0xcceeff, .7)
+    @fillLight.position.set(10, 10, 1)
     @scene.add @fillLight
 
     @scene.add new THREE.AmbientLight(0x081018)
