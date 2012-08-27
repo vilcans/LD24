@@ -159,7 +159,8 @@ class @Board
     return sq
 
   animate: (deltaSeconds) ->
-    for piece in @pieces
+    piecesCopy = @pieces.slice()
+    for piece in piecesCopy
       piece.animate deltaSeconds
 
   # startingSquare will not be included in results
