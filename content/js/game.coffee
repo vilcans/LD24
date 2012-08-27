@@ -40,7 +40,7 @@ class @Game
         Audio.play 'win'
         loserPieces = @board.getPiecesForTeam(Piece.BLACK)
         if loserPieces.length != 0
-          Audio.play 'destroy'
+          #Audio.play 'destroy'
           for loserPiece in loserPieces
             @destroyPiece loserPiece
 
