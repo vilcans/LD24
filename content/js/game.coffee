@@ -63,6 +63,7 @@ class @Game
       piece.mesh = @graphics.addPiece(piece)
 
     $('#description').html(data.description)
+    @levelStartTime = getSystemTime()
 
   init: (onFinished) ->
     @graphics.loadAssets =>
@@ -130,12 +131,14 @@ class @Game
       @board.animate deltaTime
       @checkCollisions()
 
-    for piece in @board.getPieces()
+    for piece, i in @board.getPieces()
       pos = piece.getLocation()
       piece.mesh.position.x = pos.x
       piece.mesh.position.y = pos.y
+      piece.mesh.position.z = Math.max(0, 10 + i - (now - @levelStartTime) * 10)
 
     @lastFrame = now
+
     @graphics.animate deltaTime
     @graphics.setCamera @cameraAngle, @cameraDistance
     @graphics.render()
