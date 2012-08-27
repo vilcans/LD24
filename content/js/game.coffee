@@ -1,6 +1,6 @@
 MAX_DELTA_TIME = .1
 
-PIECE_RADIUS = .8
+PIECE_RADIUS = .7
 PIECE_RADIUS_SQUARED = PIECE_RADIUS * PIECE_RADIUS
 
 floor = Math.floor
@@ -183,8 +183,13 @@ class @Game
         d = distanceSquared(apos, bpos)
         if d > PIECE_RADIUS_SQUARED
           continue
-        @destroyPiece a
-        @destroyPiece b
+        if a.isMoving() and not b.isMoving()
+          @destroyPiece b
+        else if not a.isMoving() and b.isMoving()
+          @destroyPiece a
+        else
+          @destroyPiece a
+          @destroyPiece b
 
         Audio.play 'destroy'
         # pieces is not valid any more, wait for nest tick to check for more collisions
