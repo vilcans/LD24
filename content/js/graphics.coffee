@@ -51,16 +51,15 @@ class @Graphics
     # )
 
     @materials = {}
-    @materials[Piece.WHITE] = new THREE.MeshLambertMaterial {
-      color: 0xeeddcc
-      ambient: 0x333333
-      shading: THREE.SmoothShading
-      #map: @texture
+    @materials[Piece.WHITE] = new THREE.MeshPhongMaterial {
+      color: 0xbbaa99
+      specular: 0xcccccc
+      shininess: 10
     }
-    @materials[Piece.BLACK] = new THREE.MeshLambertMaterial {
-      color: 0x111122
-      ambient: 0x333333
-      shading: THREE.SmoothShading
+    @materials[Piece.BLACK] = new THREE.MeshPhongMaterial {
+      color: 0x0c0803
+      specular: 0xcccccc
+      shininess: 100
     }
 
     @geometry = {}
@@ -89,7 +88,7 @@ class @Graphics
       )
 
   createScene: ->
-    @renderer.setClearColorHex(0x111122, 1.0)
+    @renderer.setClearColorHex(0x000811, 1.0)
     @scene = new THREE.Scene()
 
     @camera = new THREE.PerspectiveCamera(
@@ -110,7 +109,7 @@ class @Graphics
     )
     @light.castShadow = true
     @light.shadowDarkness = .5
-    @light.shadowCameraVisible = true
+    #@light.shadowCameraVisible = true
     @light.shadowCameraNear = 20
     @light.shadowCameraFar = 30
     #@light.shadowMapWidth = 2048
@@ -118,6 +117,15 @@ class @Graphics
     @light.position.set(-5, -10, 20)
 
     @scene.add @light
+
+    @fillLight = new THREE.PointLight(0xcceeff, .2)
+    @fillLight.position.set(10, 0, 1)
+    @light.castShadow = true
+    @light.shadowDarkness = .5
+    #@light.shadowCameraVisible = true
+    @light.shadowCameraNear = 1
+    @light.shadowCameraFar = 15
+    @scene.add @fillLight
 
     @scene.add new THREE.AmbientLight(0x081018)
 
