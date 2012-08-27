@@ -54,6 +54,9 @@ class @Game
         @setState WON
       else
         @think()
+    @player.onNewSquare = (piece, oldSquare, newSquare) =>
+      console.log 'thinking because of new square'
+      @think()
 
     for piece in @board.getPiecesForTeam(Piece.BLACK)
       piece.onMoveFinished = (piece) =>
@@ -171,7 +174,7 @@ class @Game
     @state = state
 
   think: ->
-      playerSquare = @player.square  # what about toSquare? mind reading?
+      playerSquare = @player.onSquare  # what about toSquare? mind reading?
       for piece in @board.getPiecesForTeam(Piece.BLACK)
         if not piece.isMoving()
           moves = piece.getValidMoves(@board)

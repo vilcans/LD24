@@ -1,12 +1,14 @@
 
 class @Piece
   # speed: units per second
-  constructor: ({type, team, speed, onMoveFinished}) ->
+  constructor: ({type, team, speed, onMoveFinished, onNewSquare}) ->
     @type = type ? 'pawn'
     @speed = speed ? 1
     @team = team ? Piece.BLACK
     @onMoveFinished = onMoveFinished ? (piece) ->
+    @onNewSquare = onNewSquare ? (piece, oldSquare, newSquare) ->
     @toSquare = null
+    @onSquare = null
 
     # Total number of seconds the current movement takes
     @moveTime = 0
@@ -29,12 +31,32 @@ class @Piece
     else
       @square.location
 
+  setSquare: (board, square) ->
+    @board = board
+    @onSquare = @square = square
+    @toSquare = null
+
+  getCurrentSquare: ->
+    if @isMoving()
+      factor = @moveProgress / @moveTime
+      rowcol = @interpolate(
+        {x: @square.column, y: @square.row},
+        {x: @toSquare.column, y: @toSquare.row},
+        factor
+      )
+      return @board.getSquare(
+        Math.floor(rowcol.y + .5), Math.floor(rowcol.x + .5)
+      )
+    else
+      @square
+
   move: (toSquare) ->
     if @isMoving()
       throw 'already moving'
     length = distance(toSquare.location, @square.location)
     @moveTime = length / @speed
     @moveProgress = 0
+    @onSquare = @square
     @toSquare = toSquare
 
   isMoving: ->
@@ -48,6 +70,16 @@ class @Piece
       @square = @toSquare
       @toSquare = null
       @onMoveFinished this
+    else
+      oldSquare = @onSquare
+      newSquare = @getCurrentSquare()
+      if newSquare != oldSquare
+        @onSquare = newSquare
+        console.log "#{this.toString()} moved from #{oldSquare.toString()} to #{newSquare.toString()}"
+        @onNewSquare this, oldSquare, newSquare
+
+  toString: ->
+    return "#{@team}_#{@type}"
 
   getValidMoves: (board) ->
     moves = []
@@ -102,8 +134,8 @@ validMovesFunctions =
     validMovesFunctions.rook moves, piece, square, board
     validMovesFunctions.bishop moves, piece, square, board
 
-Piece.BLACK = 0
-Piece.WHITE = 1
+Piece.BLACK = 'black'
+Piece.WHITE = 'white'
 
 class @Square
   constructor: (@row, @column) ->
@@ -128,6 +160,7 @@ class @Board
 
   addPiece: (piece, square) ->
     piece.square = square
+    piece.board = this
     @pieces.push piece
 
   removePiece: (pieceToRemove) ->
