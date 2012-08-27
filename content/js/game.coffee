@@ -33,7 +33,7 @@ class @Game
 
     @selection = {row: null, column: null}
 
-    @state = IN_GAME
+    @setState IN_GAME
 
   startLevel: (number) ->
     @state = IN_GAME
@@ -121,6 +121,7 @@ class @Game
     now = getSystemTime()
     deltaTime = Math.min(MAX_DELTA_TIME, now - @lastFrame)
     @totalTime += deltaTime
+    @timeInState = now - @stateStartTime
 
     #@graphics.boardMesh.rotation = new THREE.Vector3(@totalTime, @totalTime * .1, @totalTime * .01)
     #@graphics.boardMesh.updateMatrix()
@@ -139,9 +140,10 @@ class @Game
     @graphics.setCamera @cameraAngle, @cameraDistance
     @graphics.render()
 
-    timeInState = now - @stateStartTime
-    if @state == WON and timeInState >= 2
+    if @state == WON and @timeInState >= 2
       @startNextLevel()
+    if @state == LOST and @timeInState >= 2
+      @restartLevel()
 
   startNextLevel: ->
     for piece in @board.getPieces().slice()
@@ -155,8 +157,14 @@ class @Game
     else
       @startLevel (@level + 1)
 
+  restartLevel: ->
+    for piece in @board.getPieces().slice()
+      @removePiece piece
+    @startLevel @level
+
   setState: (state) ->
     @stateStartTime = getSystemTime()
+    @timeInState = 0
     @state = state
 
   think: ->
@@ -199,6 +207,9 @@ class @Game
   destroyPiece: (piece) ->
     @board.removePiece piece
     @graphics.destroyPiece piece.mesh
+    if piece.team == Piece.WHITE
+      $('#description').html("<p>Aw, #{piece.type}! Try again!")
+      @setState LOST
 
   removePiece: (piece) ->
     @board.removePiece piece
