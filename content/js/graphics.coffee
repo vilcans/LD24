@@ -88,7 +88,7 @@ class @Graphics
       )
 
   createScene: ->
-    @renderer.setClearColorHex(0x000811, 1.0)
+    @renderer.setClearColorHex(0x335566, 1.0)
     @scene = new THREE.Scene()
 
     @camera = new THREE.PerspectiveCamera(
