@@ -154,8 +154,8 @@ class @Game
         d = distanceSquared(apos, bpos)
         if d > PIECE_RADIUS_SQUARED
           continue
-        destroyPiece a
-        destroyPiece b
+        @destroyPiece a
+        @destroyPiece b
 
         Audio.play 'destroy'
         # pieces is not valid any more, wait for nest tick to check for more collisions
