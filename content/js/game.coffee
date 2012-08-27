@@ -199,8 +199,10 @@ class @Game
         else if not a.isMoving() and b.isMoving()
           @destroyPiece a
         else
-          @destroyPiece a
-          @destroyPiece b
+          if a.moveProgress > b.moveProgress
+            @destroyPiece b
+          else
+            @destroyPiece a
 
         Audio.play 'destroy'
         # pieces is not valid any more, wait for nest tick to check for more collisions
