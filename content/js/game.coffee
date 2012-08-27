@@ -48,6 +48,7 @@ class @Game
     @player.onMoveFinished = (piece) =>
       Audio.play 'move-stop'
       if piece.square.row == 7
+        $('#description').html("<p>Good job, #{@player.type}!")
         Audio.play 'win'
         Tracking.trackEvent 'game', 'win'
         @setState WON
