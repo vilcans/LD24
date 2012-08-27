@@ -5,6 +5,11 @@ PIECE_RADIUS_SQUARED = PIECE_RADIUS * PIECE_RADIUS
 
 floor = Math.floor
 
+IN_GAME = 1
+WON = 2
+LOST = 3
+
+
 class @Game
   constructor: ({
     # Element which will get the game canvas as a child
@@ -28,7 +33,13 @@ class @Game
 
     @selection = {row: null, column: null}
 
-  loadLevel: (number) ->
+    @state = IN_GAME
+
+  startLevel: (number) ->
+    @state = IN_GAME
+    console.log "Loading level #{number}"
+    Tracking.trackEvent 'game', 'level', {value: number}
+    @level = number
     @board = new Board()
 
     data = levels[number](@board)
@@ -38,17 +49,17 @@ class @Game
       Audio.play 'move-stop'
       if piece.square.row == 7
         Audio.play 'win'
-        loserPieces = @board.getPiecesForTeam(Piece.BLACK)
-        if loserPieces.length != 0
-          #Audio.play 'destroy'
-          for loserPiece in loserPieces
-            @destroyPiece loserPiece
-
-      @think()
+        Tracking.trackEvent 'game', 'win'
+        @setState WON
+      else
+        @think()
 
     for piece in @board.getPiecesForTeam(Piece.BLACK)
       piece.onMoveFinished = (piece) =>
         @think()
+
+    for piece in @board.getPieces()
+      piece.mesh = @graphics.addPiece(piece)
 
     $('#description').html(data.description)
 
@@ -60,9 +71,6 @@ class @Game
   start: ->
     @graphics.createScene()
     @graphics.start()
-
-    for piece in @board.getPieces()
-      piece.mesh = @graphics.addPiece(piece)
 
     $(@graphics.renderer.domElement)
       .mousedown(@onMouseDown)
@@ -111,14 +119,14 @@ class @Game
   animate: =>
     now = getSystemTime()
     deltaTime = Math.min(MAX_DELTA_TIME, now - @lastFrame)
-
-    @board.animate deltaTime
     @totalTime += deltaTime
 
     #@graphics.boardMesh.rotation = new THREE.Vector3(@totalTime, @totalTime * .1, @totalTime * .01)
     #@graphics.boardMesh.updateMatrix()
 
-    @checkCollisions()
+    if @state == IN_GAME
+      @board.animate deltaTime
+      @checkCollisions()
 
     for piece in @board.getPieces()
       pos = piece.getLocation()
@@ -129,6 +137,22 @@ class @Game
     @graphics.animate deltaTime
     @graphics.setCamera @cameraAngle, @cameraDistance
     @graphics.render()
+
+    timeInState = now - @stateStartTime
+    if @state == WON and timeInState >= 2
+      @startNextLevel()
+
+  startNextLevel: ->
+    for piece in @board.getPieces().slice()
+      if piece.team == Piece.BLACK
+        @destroyPiece piece
+      else
+        @removePiece piece
+    @startLevel (@level + 1) % levels.length
+
+  setState: (state) ->
+    @stateStartTime = getSystemTime()
+    @state = state
 
   think: ->
       playerSquare = @player.square  # what about toSquare? mind reading?
@@ -165,6 +189,10 @@ class @Game
   destroyPiece: (piece) ->
     @board.removePiece piece
     @graphics.destroyPiece piece.mesh
+
+  removePiece: (piece) ->
+    @board.removePiece piece
+    @graphics.removePiece piece.mesh
 
   makeMove: (square) ->
     valid = @player.getValidMoves(@board)

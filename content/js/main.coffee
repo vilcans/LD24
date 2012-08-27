@@ -23,13 +23,12 @@ $(document).ready ->
       Tracking.trackEvent 'game', 'start'
       game.start()
 
-    match = /#(\d+)/.exec(window.location.hash)
-    if match
-      level = parseInt(match[1])
-    else
-      level = 1
-    game.loadLevel level
-
+      match = /#(\d+)/.exec(window.location.hash)
+      if match
+        level = parseInt(match[1])
+      else
+        level = 1
+      game.startLevel level
 
 @reportError = (e) ->
   console.error e

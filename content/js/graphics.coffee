@@ -155,7 +155,11 @@ class @Graphics
       rotationSpeedY: (Math.random() * 4 - 2) * Math.PI * 2
     @dyingPieces.push mesh
 
+  removePiece: (mesh) ->
+    @scene.remove mesh
+
   start: ->
+    console.log 'Graphics start'
     @parentElement.appendChild @renderer.domElement
 
     if @stats
