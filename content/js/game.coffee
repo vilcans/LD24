@@ -36,6 +36,14 @@ class @Game
     @player = @board.getPiecesForTeam(Piece.WHITE)[0]
     @player.onMoveFinished = (piece) =>
       Audio.play 'move-stop'
+      if piece.square.row == 7
+        Audio.play 'win'
+        loserPieces = @board.getPiecesForTeam(Piece.BLACK)
+        if loserPieces.length != 0
+          Audio.play 'destroy'
+          for loserPiece in loserPieces
+            @destroyPiece loserPiece
+
       @think()
 
     for piece in @board.getPiecesForTeam(Piece.BLACK)
@@ -146,15 +154,17 @@ class @Game
         d = distanceSquared(apos, bpos)
         if d > PIECE_RADIUS_SQUARED
           continue
-        @board.removePiece a
-        @board.removePiece b
-        @graphics.destroyPiece a.mesh
-        @graphics.destroyPiece b.mesh
+        destroyPiece a
+        destroyPiece b
 
         Audio.play 'destroy'
         # pieces is not valid any more, wait for nest tick to check for more collisions
         return
     return
+
+  destroyPiece: (piece) ->
+    @board.removePiece piece
+    @graphics.destroyPiece piece.mesh
 
   makeMove: (square) ->
     valid = @player.getValidMoves(@board)
