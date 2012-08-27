@@ -149,7 +149,11 @@ class @Game
         @destroyPiece piece
       else
         @removePiece piece
-    @startLevel (@level + 1) % levels.length
+    if @level == levels.length - 1
+      Tracking.trackEvent 'game', 'completed'
+      @startLevel 1
+    else
+      @startLevel (@level + 1)
 
   setState: (state) ->
     @stateStartTime = getSystemTime()
