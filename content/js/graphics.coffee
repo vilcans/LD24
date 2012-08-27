@@ -59,7 +59,7 @@ class @Graphics
     @materials[Piece.BLACK] = new THREE.MeshPhongMaterial {
       color: 0x0c0803
       specular: 0xcccccc
-      shininess: 100
+      shininess: 30
     }
 
     @geometry = {}
@@ -114,7 +114,7 @@ class @Graphics
     @light.shadowCameraFar = 30
     #@light.shadowMapWidth = 2048
     #@light.shadowMapHeight = 2048
-    @light.position.set(-5, -10, 20)
+    @light.position.set(-10, -10, 20)
 
     @scene.add @light
 
