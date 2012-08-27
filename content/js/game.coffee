@@ -9,6 +9,13 @@ IN_GAME = 1
 WON = 2
 LOST = 3
 
+dieMessages =
+  'pawn': 'Ouch! You got <em>pawn</em>ed!'
+  'rook': '<em>Rook</em>ie mistake!'
+  'bishop': "For God's sake, <em>bishop</em>!"
+  'knight': 'Good night, bad <em>knight</em>!'
+  'queen': 'Dancing like a fairy, <em>queen</em>!'
+  'king': "You're still the <em>king</em>!"
 
 class @Game
   constructor: ({
@@ -216,7 +223,7 @@ class @Game
     @board.removePiece piece
     @graphics.destroyPiece piece.mesh
     if piece.team == Piece.WHITE
-      $('#description').html("<p>Aw, #{piece.type}! Try again!")
+      $('#description').html("<p>#{dieMessages[piece.type]}")
       @setState LOST
 
   removePiece: (piece) ->
