@@ -207,7 +207,7 @@ class @Game
         else if not a.isMoving() and b.isMoving()
           @destroyPiece a
         else
-          if a.moveProgress > b.moveProgress
+          if a.moveProgress < b.moveProgress
             @destroyPiece b
           else
             @destroyPiece a
