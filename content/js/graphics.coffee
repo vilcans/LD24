@@ -71,7 +71,7 @@ class @Graphics
       rook: { scale: .5 * .8 }
       knight: { scale: .5 * .8 }
       king: { scale: .5 * .8 }
-      #queen: { scale: .5 * .8 }
+      queen: { scale: .5 * .8 }
       board: { scale: 1 }
 
     for name of meshes
