@@ -54,13 +54,11 @@ class @Game
     @player = @board.getPiecesForTeam(Piece.WHITE)[0]
     @player.onMoveFinished = (piece) =>
       Audio.play 'move-stop'
-      if piece.square.row == 7
+      if piece.square.row == 7 and @player.type == 'pawn'
         $('#description').html("<p>Good job, #{@player.type}!")
         Audio.play 'win'
         Tracking.trackEvent 'game', 'win'
         @setState WON
-      else
-        @think()
     @player.onNewSquare = (piece, oldSquare, newSquare) =>
       console.log 'thinking because of new square'
       @think()
@@ -225,6 +223,10 @@ class @Game
     if piece.team == Piece.WHITE
       $('#description').html("<p>#{dieMessages[piece.type]}")
       @setState LOST
+    else
+      if @state == IN_GAME and piece.type == 'king'
+        $('#description').html("<p>Death to that king!")
+        @setState WON
 
   removePiece: (piece) ->
     @board.removePiece piece
