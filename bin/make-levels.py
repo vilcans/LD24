@@ -4,7 +4,6 @@ import yaml
 import sys
 import json
 
-#levels = yaml.load_all(open('content/levels.yaml'))
 levels = yaml.load_all(sys.stdin)
 
 print 'levels = [];'

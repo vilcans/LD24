@@ -62,6 +62,8 @@ class LevelsFilter < Nanoc::Filter
   identifier :levels
   type :text
   def run(content, params={})
-    `echo "#{content}" | bin/make-levels.py`
+    r = `echo "#{content}" | bin/make-levels.py`
+    return r if $?.exitstatus == 0
+    raise "make-levels failed: #{$?}"
   end
 end
