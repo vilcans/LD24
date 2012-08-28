@@ -13,8 +13,9 @@ def get_version():
 
 @task
 def clean_build():
-    local('rm -rf site')
-    local('NANOC_ENV=production nanoc')
+    local('rm -rf site tmp')
+    #local('NANOC_ENV=production nanoc')
+    local('nanoc')
 
 @task
 def release(version=None):
