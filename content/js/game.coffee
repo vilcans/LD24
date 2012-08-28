@@ -60,7 +60,7 @@ class @Game
         Tracking.trackEvent 'game', 'win'
         @setState WON
     @player.onNewSquare = (piece, oldSquare, newSquare) =>
-      console.log 'thinking because of new square'
+      #console.log 'thinking because of new square'
       @think()
 
     for piece in @board.getPiecesForTeam(Piece.BLACK)

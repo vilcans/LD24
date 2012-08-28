@@ -75,7 +75,7 @@ class @Piece
       newSquare = @getCurrentSquare()
       if newSquare != oldSquare
         @onSquare = newSquare
-        console.log "#{this.toString()} moved from #{oldSquare.toString()} to #{newSquare.toString()}"
+        #console.log "#{this.toString()} moved from #{oldSquare.toString()} to #{newSquare.toString()}"
         @onNewSquare this, oldSquare, newSquare
 
   toString: ->
