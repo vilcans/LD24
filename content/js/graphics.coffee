@@ -51,12 +51,12 @@ class @Graphics
     # )
 
     @materials = {}
-    @materials[Piece.WHITE] = new THREE.MeshPhongMaterial {
+    @materials[Piece.BLACK] = new THREE.MeshPhongMaterial {
       color: 0xbbaa99
       specular: 0xcccccc
       shininess: 10
     }
-    @materials[Piece.BLACK] = new THREE.MeshPhongMaterial {
+    @materials[Piece.WHITE] = new THREE.MeshPhongMaterial {
       color: 0x0c0803
       specular: 0xcccccc
       shininess: 30
