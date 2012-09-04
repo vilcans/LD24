@@ -7,6 +7,9 @@ but it uses nanoc for building.
 
     gem install nanoc coffee-script uglifier kramdown mime-types therubyracers
 
+    apt-get install libyaml-dev
+    pip install pyyaml
+
 Do we also need adsf?
 
 # Install new version of the Initializr code
