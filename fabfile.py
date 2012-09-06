@@ -4,7 +4,7 @@ from fabric.api import task, local, run, abort, sudo, env
 from fabric.operations import prompt
 from fabric.decorators import hosts
 from fabric.context_managers import prefix, cd, settings, hide
-from fabric.colors import green
+from fabric.colors import green, yellow
 from fabric.contrib.files import exists
 
 # For a new project:
@@ -81,12 +81,20 @@ def release_only(version=None):
     git('fetch')
     # fast-forward
     git('reset --mixed origin/master --')
-    # Get latest release version number
-    git('checkout version.txt')
+
+    if not version:
+        # Get latest release version number
+        with settings(warn_only=True):
+            version = git('show origin/master:version.txt', capture=True)
+            if version.succeeded:
+                version = next_version(version.strip())
+            else:
+                version = '0.0.1'
+                print(yellow(
+                    'Releases repo has no version.txt: using ' + version
+                ))
 
     commit = get_hash()
-    if not version:
-        version = get_next_version_number()
 
     tag = 'v' + version
     if git('tag -l ' + tag, capture=True):
@@ -107,14 +115,13 @@ def release_only(version=None):
     git('push --tags origin master')
     local('git tag ' + tag)
 
-def get_next_version_number():
+def next_version(version):
     """Increase and return the version number.
     Makes sure the version is at least three numbers,
     e.g. 2.3.0
 
     """
-    with open('version.txt') as s:
-        values = s.read().strip().split('.')
+    values = version.split('.')
     values += ('0',) * (3 - len(values))
     values[-1] = str(int(values[-1]) + 1)
     return '.'.join(values)
