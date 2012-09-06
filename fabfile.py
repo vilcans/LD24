@@ -126,15 +126,24 @@ def clone_releases_repo():
 
 @task
 @hosts(deploy_host)
-def deploy():
-    """Deploy latest version"""
-    if exists(install_dir):
+def deploy(version=None):
+    """Deploy latest version, or a specific version if given as argument.
+
+    """
+    gitdir = install_dir + '/.git'
+    if exists(gitdir):
         with cd(install_dir):
-            run('git pull')
+            run('git fetch')
     else:
         print(green('%s does not exist, I guess this is the first release' %
-            install_dir))
+            gitdir))
         run('git clone %s %s' % (releases_repo_path, install_dir))
+
+    with cd(install_dir):
+        if version:
+            run('git reset --hard v' + version)
+        else:
+            run('git reset --hard origin/master')
 
 @task
 @hosts(repo_host)
