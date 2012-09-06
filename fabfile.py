@@ -59,7 +59,7 @@ def release(version=None):
 def release_only(version=None):
     """Upload the current version to the server without building first.
     Takes an optional version string as parameter.
-    By default uses the Git hash.
+    By default generates a new version number by incrementing.
 
     """
 
@@ -98,7 +98,7 @@ def release_only(version=None):
 
     git('commit -m "%s"' % message)
     git('tag ' + tag)
-    git('push origin')
+    git('push --tags origin master')
     local('git tag ' + tag)
 
 def get_next_version_number():
