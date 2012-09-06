@@ -80,7 +80,7 @@ class @Graphics
         "assets/#{name}.js",
         (
           (name) => callbacks.add (geometry) =>
-            console.log "Loaded #{name}", geometry
+            console.log "Loaded #{name}"
             scale = meshes[name].scale
             geometry.applyMatrix(new THREE.Matrix4().makeScale(scale, scale, scale))
             @geometry[name] = geometry
