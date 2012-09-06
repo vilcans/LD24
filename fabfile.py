@@ -10,8 +10,14 @@ from fabric.contrib.files import exists
 # For a new project:
 # 1. Edit project_name below.
 # 2. fab create_releases_repo
+# 3. Make a release with `fab release:0.1`
+#    (or whatever version number you want).
+#    Explicit version number is only needed the first time.
+#    After that `fab release` will automatically increment
+#    the last version number, always making sure it consists
+#    of at least three numbers. So after release 1.0, there's 1.0.1.
 
-# Edit this! Must be unique.
+# Edit this! Should be unique.
 project_name = 'site-start'
 deploy_host = repo_host = 'vilcon.se'
 
