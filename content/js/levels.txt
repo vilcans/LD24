@@ -1,6 +1,6 @@
 ---
 dummy:
-    Just a dummy uses the first yaml document in a file
+    Just a dummy as nanoc swallows the first yaml document in a file
 ---
 description:
     <p>Those are your baby steps, pawn!
