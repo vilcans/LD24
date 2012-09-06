@@ -1,7 +1,7 @@
 import os
 
 from fabric.api import task, local, run, abort, sudo, env
-from fabric.operations import put
+from fabric.operations import prompt
 from fabric.decorators import hosts
 from fabric.context_managers import prefix, cd, settings, hide
 from fabric.colors import green
@@ -62,28 +62,44 @@ def release_only(version=None):
     By default uses the Git hash.
 
     """
-    if not version:
-        version = get_next_version_number()
-    commit = get_hash()
 
     if not os.path.exists('releases.git'):
         clone_releases_repo()
 
-    def git(command):
-        local('git --work-tree=. --git-dir=releases.git ' + command)
+    def git(command, **kwargs):
+        return local(
+            'git --work-tree=. --git-dir=releases.git ' + command,
+            **kwargs
+        )
 
     git('fetch')
     # fast-forward
     git('reset --mixed origin/master --')
-    #git('add -fA site/ nginx.conf')
+    # Get latest release version number
+    git('checkout version.txt')
+
+    commit = get_hash()
+    if not version:
+        version = get_next_version_number()
+
+    tag = 'v' + version
+    if git('tag -l ' + tag, capture=True):
+        abort('Tag %s already exists in releases repo' % tag)
+    if local('git tag -l ' + tag, capture=True):
+        abort('Tag %s already exists in local repo' % tag)
+
     set_version_number(version)
     git('add -fA site/ version.txt')
-    print(green('The following will be committed'))
-    #git('status')
+    message = 'Version %s, commit %s' % (version, commit)
     git('diff --staged --stat')
-    git('commit -m "Release %s, commit %s"' % (version, commit))
-    git('tag v' + version)
+    print(green('This will be committed as ' + message))
+    if prompt('Go on?', default='y', validate='[yn]') == 'n':
+        abort('Aborted')
+
+    git('commit -m "%s"' % message)
+    git('tag ' + tag)
     git('push origin')
+    local('git tag ' + tag)
 
 def get_next_version_number():
     """Increase and return the version number.
