@@ -3,6 +3,7 @@ crash.log
 site/
 tmp/
 *.sublime-workspace
-releases.git/
-*.pyc
 *.blend[0123456789]*
+releases.git
+*.pyc
+version.txt
