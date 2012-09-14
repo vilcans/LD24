@@ -15,7 +15,7 @@ dieMessages =
   'bishop': "For God's sake, <em>bishop</em>!"
   'knight': 'Good night, bad <em>knight</em>!'
   'queen': 'Dancing like a fairy, <em>queen</em>!'
-  'king': "You're still the <em>king</em>!"
+  'king': 'The <em>king</em> is dead! Long live the <em>king</em>!'
 
 class @Game
   constructor: ({
